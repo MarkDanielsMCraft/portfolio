@@ -95,7 +95,7 @@ const SystemStatus = () => {
   }, []);
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 hidden md:flex items-center gap-4 px-4 py-2 bg-slate-900/80 backdrop-blur-md border border-white/10 rounded-full text-[10px] font-mono text-slate-400 shadow-xl">
+    <div className="fixed bottom-6 right-6 z-50 hidden md:flex items-center gap-4 px-4 py-2 bg-slate-900/80 backdrop-blur-md border border-white/10 rounded-full text-[10px] font-mono text-slate-300 shadow-xl">
       <div className="flex items-center gap-2">
         <Globe size={12} className="text-blue-500" />
         <span>AUGSBURG, DE</span>
@@ -231,7 +231,7 @@ const SkillBadge = ({ text, category }) => (
     ${category === 'tech' ? 'bg-blue-500/10 border-blue-500/20 text-blue-300 hover:bg-blue-500/20 hover:border-blue-500/40' :
       category === 'design' ? 'bg-purple-500/10 border-purple-500/20 text-purple-300 hover:bg-purple-500/20 hover:border-purple-500/40' :
         category === 'test' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-300 hover:bg-emerald-500/20 hover:border-emerald-500/40' :
-          'bg-slate-800/50 border-slate-700 text-slate-400'}
+          'bg-slate-800/50 border-slate-700 text-slate-300'}
   `}>
     {text}
   </span>
@@ -317,7 +317,7 @@ const App = () => {
   return (
     <ReactLenis root>
       <div
-        className="min-h-screen bg-[#050B14] text-slate-300 font-sans selection:bg-blue-500/30 selection:text-blue-200 relative overflow-hidden"
+        className="min-h-screen bg-[#050B14] text-slate-200 font-sans selection:bg-blue-500/30 selection:text-blue-200 relative overflow-hidden"
         onMouseMove={handleMouseMove}
       >
         <SystemStatus />
@@ -384,7 +384,7 @@ const App = () => {
 
               <motion.div
                 initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }}
-                className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300"
+                className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-200"
               >
                 {['About', 'Experience', 'Projects'].map((item) => (
                   <Magnetic key={item}>
@@ -429,7 +429,7 @@ const App = () => {
                   </span>
                 </h1>
 
-                <p className="max-w-xl text-lg text-slate-300 leading-relaxed mb-8">
+                <p className="max-w-xl text-lg text-slate-200 leading-relaxed mb-8">
                   I bridge the gap between technical complexity and business logic. Meticulous, data-driven, and built for precision.
                 </p>
 
@@ -467,7 +467,7 @@ const App = () => {
                     <div className="text-xs text-slate-400 font-mono ml-2">university_project.java</div>
                   </div>
                   <div className="space-y-3 font-mono text-sm relative z-10">
-                    <div className="text-slate-400">// Learning Algorithms in Java</div>
+                    <div className="text-slate-300">// Learning Algorithms in Java</div>
                     <div className="pl-0 flex gap-4">
                       <span className="text-purple-400">public class</span> <span className="text-yellow-200">Portfolio</span> {'{'}
                     </div>
@@ -514,13 +514,13 @@ const App = () => {
                 {/* Main Bio */}
                 <RevealOnScroll>
                   <TiltCard className="md:col-span-2 bg-[#0a101f]/80 border border-white/5 rounded-3xl p-8 h-full hover:border-blue-500/30 transition-all backdrop-blur-md group hover:bg-[#0a101f]">
-                    <p className="text-lg text-slate-200 leading-relaxed mb-6 group-hover:text-white transition-colors">
+                    <p className="text-lg text-slate-100 leading-relaxed mb-6 group-hover:text-white transition-colors">
                       I am an <strong>International Information Systems student</strong> based in Augsburg, Germany. My studies bridge the gap between business logic and technical implementation.
                     </p>
-                    <p className="text-slate-300 leading-relaxed group-hover:text-slate-200 transition-colors">
+                    <p className="text-slate-200 leading-relaxed group-hover:text-slate-100 transition-colors">
                       I look to apply my structured work style and technical understanding to manual software testing. At <span className="text-white font-semibold">Malengo</span>, I manage complex data and ensure integrity for reporting.
                     </p>
-                    <div className="mt-8 flex gap-6 text-sm font-medium text-slate-400">
+                    <div className="mt-8 flex gap-6 text-sm font-medium text-slate-300">
                       <span className="flex items-center gap-2 px-3 py-1 bg-white/5 rounded-full"><MapPin size={14} className="text-blue-400" /> TH Augsburg</span>
                       <span className="flex items-center gap-2 px-3 py-1 bg-white/5 rounded-full"><Globe size={14} className="text-emerald-400" /> Eng, De, Luganda</span>
                     </div>
@@ -534,7 +534,7 @@ const App = () => {
                     <div className="relative z-10">
                       <div className="w-12 h-12 bg-blue-600/20 rounded-xl flex items-center justify-center mb-4 text-blue-400"><FileText size={24} /></div>
                       <h3 className="text-xl font-bold text-white mb-1">My CV</h3>
-                      <p className="text-sm text-slate-400">See my coursework & projects.</p>
+                      <p className="text-sm text-slate-300">See my coursework & projects.</p>
                     </div>
                     <div className="flex gap-2 mt-6 relative z-10">
                       <Magnetic>
@@ -554,7 +554,7 @@ const App = () => {
                 {/* Tech Stack */}
                 <RevealOnScroll delay={0.3}>
                   <TiltCard className="md:col-span-3 bg-[#0a101f]/80 border border-white/5 rounded-3xl p-8 backdrop-blur-sm relative overflow-hidden hover:border-white/10 transition-colors">
-                    <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400 mb-6 flex items-center gap-2"><Cpu size={16} /> What I'm Learning</h3>
+                    <h3 className="text-sm font-bold uppercase tracking-widest text-slate-300 mb-6 flex items-center gap-2"><Cpu size={16} /> What I'm Learning</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
                       <div>
                         <h4 className="text-white font-medium mb-3 text-sm">Coursework & Code</h4>
@@ -616,7 +616,7 @@ const App = () => {
 
                           <ul className="space-y-3">
                             {exp.tasks.map((task, i) => (
-                              <li key={i} className="text-slate-400 text-sm leading-relaxed flex gap-3 group-hover:text-slate-300 transition-colors">
+                              <li key={i} className="text-slate-300 text-sm leading-relaxed flex gap-3 group-hover:text-slate-200 transition-colors">
                                 <ChevronRight size={14} className="mt-1 flex-shrink-0 text-slate-600 group-hover:text-blue-500 transition-colors" />
                                 {task}
                               </li>
@@ -677,7 +677,7 @@ const App = () => {
                           </Magnetic>
                         </div>
 
-                        <p className="text-slate-400 leading-relaxed mb-6 text-sm whitespace-pre-line">{project.description}</p>
+                        <p className="text-slate-300 leading-relaxed mb-6 text-sm whitespace-pre-line">{project.description}</p>
 
                         <div className="flex flex-wrap gap-2">
                           {project.tech.map((t, i) => (
