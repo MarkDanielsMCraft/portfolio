@@ -430,7 +430,8 @@ const App = () => {
                 </h1>
 
                 <p className="max-w-xl text-lg text-slate-200 leading-relaxed mb-8">
-                  I bridge the gap between technical complexity and business logic. Meticulous, data-driven, and built for precision.
+                  I am an <span className="text-slate-100 font-semibold underline decoration-blue-500/50 decoration-2 underline-offset-4">Information Systems Student</span> at TH Augsburg.
+                  Experienced in validating complex relational data and testing modern web applications.
                 </p>
 
                 <div className="flex flex-wrap gap-4">
