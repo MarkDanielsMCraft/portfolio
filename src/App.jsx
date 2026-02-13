@@ -20,7 +20,12 @@ import {
   Cpu,
   Coffee,
   ExternalLink,
-  Code2
+  Code2,
+  TrendingUp,
+  Network,
+  Globe2,
+  BarChart3,
+  Workflow
 } from 'lucide-react';
 import { motion, useScroll, useTransform, useSpring, useMotionTemplate, useMotionValue } from 'framer-motion';
 
@@ -70,50 +75,59 @@ const Magnetic = ({ children }) => {
 };
 
 const BackgroundParticles = () => {
-  // Knowledge Particles - Terms from Info Systems & Dev
-  const terms = [
+  // Knowledge Particles - Mixed Info Systems (Business + Tech + Global)
+  const particles = [
+    // Tech / Dev
     { text: "SQL", color: "text-orange-400" },
-    { text: "px", color: "text-purple-400" },
     { text: "<div>", color: "text-blue-400" },
-    { text: "HTTP", color: "text-emerald-400" },
-    { text: "JSON", color: "text-yellow-400" },
-    { text: "void", color: "text-red-400" },
-    { text: "404", color: "text-pink-400" },
-    { text: "git", color: "text-orange-500" },
-    { text: "npm", color: "text-red-500" },
-    { text: "SELECT", color: "text-blue-300" },
-    { text: "REST", color: "text-green-300" },
     { text: "API", color: "text-yellow-200" },
-    { text: "if/else", color: "text-purple-300" },
-    { text: "return", color: "text-cyan-400" },
-    { text: "true", color: "text-blue-500" },
-    { text: "0101", color: "text-slate-600" }
+    { text: "git", color: "text-orange-500" },
+    { text: "JSON", color: "text-yellow-400" },
+
+    // Business / Systems
+    { text: "ERP", color: "text-emerald-400" },
+    { text: "SAP", color: "text-blue-300" },
+    { text: "BPMN", color: "text-purple-400" },
+    { text: "CRM", color: "text-pink-400" },
+    { text: "ROI", color: "text-green-400" },
+    { text: "KPI", color: "text-cyan-400" },
+    { text: "Agile", color: "text-indigo-400" },
+    { text: "Scrum", color: "text-blue-200" },
+
+    // Icons (Visual Metaphors)
+    { icon: Globe, color: "text-emerald-500", size: 24 }, // International
+    { icon: Database, color: "text-blue-500", size: 24 }, // Systems
+    { icon: Network, color: "text-purple-500", size: 24 }, // Connectivity
+    { icon: TrendingUp, color: "text-green-500", size: 24 }, // Growth/Business
+    { icon: BarChart3, color: "text-yellow-500", size: 24 }, // Analytics
+    { icon: Workflow, color: "text-cyan-500", size: 24 }, // Process
+    { icon: Globe2, color: "text-blue-400", size: 24 }, // Global
   ];
 
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden">
-      {terms.map((term, i) => (
+      {particles.map((item, i) => (
         <motion.div
           key={i}
           initial={{ opacity: 0, scale: 0.5, x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight }}
           animate={{
-            opacity: [0, 0.4, 0],
-            y: [0, -100, 0],
-            scale: [0.8, 1.2, 0.8]
+            opacity: [0, 0.6, 0], // Increased opacity to 0.6 for better visibility
+            y: [0, -80, 0],
+            rotate: item.icon ? [0, 15, -15, 0] : 0 // Slight rotation for icons
           }}
           transition={{
             duration: 15 + Math.random() * 10,
             repeat: Infinity,
             delay: Math.random() * 5
           }}
-          className={`absolute ${term.color} font-mono text-sm md:text-xl font-bold select-none blur-[0.5px]`}
+          className={`absolute ${item.color} font-mono font-bold select-none z-0`}
           style={{
             left: `${Math.random() * 100}%`,
             top: `${Math.random() * 100}%`,
-            textShadow: '0 0 10px currentColor'
+            fontSize: item.icon ? undefined : (Math.random() > 0.5 ? '1.25rem' : '0.875rem') // Randomize text size
           }}
         >
-          {term.text}
+          {item.icon ? <item.icon size={item.size} /> : item.text}
         </motion.div>
       ))}
     </div>
@@ -158,16 +172,16 @@ const App = () => {
       title: "StartGermany",
       subtitle: "Survival Kit",
       tag: "QA & Development",
-      description: "Comprehensive expat guide platform. I helped migrate parts of the logic to React 19, learning how to implement rigorous verification protocols for dynamic UI.",
+      description: "• Modern Web Testing: Built and tested a responsive guide platform, manually verified stability during a major upgrade to React 19.\n• QA Workflow Automation: Configured ESLint to automatically detect syntax errors and improve code quality before deployment.\n• UI & Logic Verification: Manually tested dynamic components, such as guide counters and tag filters, to ensure real-time data accuracy.\n• AI-Assisted Workflow: Utilized AI tools for initial scaffolding while focusing on manual verification and debugging of the generated logic.",
       tech: ["React 19", "ESLint", "Vite", "QA Automation"],
       link: "https://startgermany.vercel.app/",
       image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=800",
     },
     {
       title: "Lyia Braids",
-      subtitle: "Platform",
+      subtitle: "Service Website",
       tag: "UX & Testing",
-      description: "Service platform project where I focused on frictionless booking flow. I practiced cross-browser testing and mobile responsiveness validation.",
+      description: "• UX Optimization: Designed a mobile-first interface and implemented a direct-to-WhatsApp booking integration to minimize user friction.\n• Cross-Browser Testing: Verified layout consistency across Chrome, Safari, and mobile views to ensure a professional user experience.\n• Privacy Compliance: Integrated and tested GDPR-compliant cookie consent banners.",
       tech: ["Tailwind CSS", "UX Design", "GDPR Compliance"],
       link: "https://lyia-braids.vercel.app/",
       image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&q=80&w=800",
@@ -177,22 +191,21 @@ const App = () => {
   const experience = [
     {
       company: "Malengo gGmbH",
-      role: "Working Student - Data Quality",
-      period: "Dec 2025 - Present",
+      role: "Working Student (Data Quality & Program Support)",
+      period: "12/2025 - Present",
       tasks: [
-        "Learning to manage complex relational data for Kenya TVET cohorts.",
-        "Assist in executing consistency checks between attendance and status logs.",
-        "Reporting on data integrity issues for program stakeholders."
+        "Data Validation: Manage and validate comprehensive tracking sheets and dashboards for the Kenya TVET scholar program, covering cohorts 2024B, 2025A, and 2025B.",
+        "Consistency Checks: Conduct daily verification between attendance logs, vaccination records, and status reports to identify and resolve discrepancies.",
+        "Process Documentation: Structure and maintain operational data files to ensure 100% data integrity for reporting."
       ],
       icon: <Database className="w-5 h-5 text-blue-400" />
     },
     {
       company: "Study in Germany (DAAD)",
       role: "Volunteer Blogger",
-      period: "Mar 2025 - Present",
+      period: "03/2025 - Present",
       tasks: [
-        "Content Support: Verifying accuracy and clarity for an international audience.",
-        "Sharing my student journey with 10k+ readers via structured insights."
+        "Content QA: Write, verify accuracy and clarity of information for the international audience."
       ],
       icon: <Globe className="w-5 h-5 text-emerald-400" />
     }
@@ -282,7 +295,7 @@ const App = () => {
               initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }}
               className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400"
             >
-              {['About', 'Experience', 'Work'].map((item) => (
+              {['About', 'Experience', 'Projects'].map((item) => (
                 <Magnetic key={item}>
                   <a href={`#${item.toLowerCase()}`} className="hover:text-blue-400 transition-colors relative group block px-2 py-1">
                     {item}
@@ -325,7 +338,7 @@ const App = () => {
 
               <p className="max-w-xl text-lg text-slate-400 leading-relaxed mb-8">
                 I am an <span className="text-slate-200 font-semibold underline decoration-blue-500/50 decoration-2 underline-offset-4">Information Systems Student</span> at TH Augsburg.
-                Currently exploring the intersection of Data Quality and Frontend Development.
+                Experienced in validating complex relational data and testing modern web applications.
               </p>
 
               <div className="flex flex-wrap gap-4">
@@ -417,7 +430,7 @@ const App = () => {
                     I am an <strong>International Information Systems student</strong> based in Augsburg, Germany. My studies bridge the gap between business logic and technical implementation.
                   </p>
                   <p className="text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors">
-                    I don't claim to be an expert yet. I'm a builder who breaks things to learn how they work. At <span className="text-white font-semibold">Malengo</span>, I apply what I learn in class to real-world data problems.
+                    I look to apply my structured work style and technical understanding to manual software testing. At <span className="text-white font-semibold">Malengo</span>, I manage complex data and ensure integrity for reporting.
                   </p>
                   <div className="mt-8 flex gap-6 text-sm font-medium text-slate-500">
                     <span className="flex items-center gap-2 px-3 py-1 bg-white/5 rounded-full"><MapPin size={14} className="text-blue-400" /> TH Augsburg</span>
@@ -576,7 +589,7 @@ const App = () => {
                         </Magnetic>
                       </div>
 
-                      <p className="text-slate-400 leading-relaxed mb-6 text-sm">{project.description}</p>
+                      <p className="text-slate-400 leading-relaxed mb-6 text-sm whitespace-pre-line">{project.description}</p>
 
                       <div className="flex flex-wrap gap-2">
                         {project.tech.map((t, i) => (
