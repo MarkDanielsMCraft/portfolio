@@ -1,61 +1,173 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
-  ShieldCheck,
   Terminal,
   Globe,
   Github,
   Linkedin,
   Mail,
   ChevronRight,
-  ExternalLink,
   Database,
-  Search,
   CheckCircle2,
   Menu,
   X,
-  Smartphone,
-  Layout,
-  Cpu,
   Download,
   User,
   FileText,
   MapPin,
   Calendar,
   Eye,
-  Coffee
+  Search,
+  Cpu,
+  Coffee,
+  ExternalLink,
+  Code2
 } from 'lucide-react';
+import { motion, useScroll, useTransform, useSpring, useMotionTemplate, useMotionValue } from 'framer-motion';
+
+// --- Components ---
+
+const RevealOnScroll = ({ children, delay = 0 }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-50px" }}
+    transition={{ duration: 0.6, delay, ease: "easeOut" }}
+  >
+    {children}
+  </motion.div>
+);
+
+const Magnetic = ({ children }) => {
+  const ref = useRef(null);
+  const position = { x: useMotionValue(0), y: useMotionValue(0) };
+
+  const handleMouse = (e) => {
+    const { clientX, clientY } = e;
+    const { height, width, left, top } = ref.current.getBoundingClientRect();
+    const middleX = clientX - (left + width / 2);
+    const middleY = clientY - (top + height / 2);
+    position.x.set(middleX * 0.1);
+    position.y.set(middleY * 0.1);
+  };
+
+  const reset = () => {
+    position.x.set(0);
+    position.y.set(0);
+  };
+
+  const { x, y } = position;
+  return (
+    <motion.div
+      style={{ x, y }}
+      ref={ref}
+      onMouseMove={handleMouse}
+      onMouseLeave={reset}
+      transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
+    >
+      {children}
+    </motion.div>
+  );
+};
+
+const BackgroundParticles = () => {
+  // Knowledge Particles - Terms from Info Systems & Dev
+  const terms = [
+    { text: "SQL", color: "text-orange-400" },
+    { text: "px", color: "text-purple-400" },
+    { text: "<div>", color: "text-blue-400" },
+    { text: "HTTP", color: "text-emerald-400" },
+    { text: "JSON", color: "text-yellow-400" },
+    { text: "void", color: "text-red-400" },
+    { text: "404", color: "text-pink-400" },
+    { text: "git", color: "text-orange-500" },
+    { text: "npm", color: "text-red-500" },
+    { text: "SELECT", color: "text-blue-300" },
+    { text: "REST", color: "text-green-300" },
+    { text: "API", color: "text-yellow-200" },
+    { text: "if/else", color: "text-purple-300" },
+    { text: "return", color: "text-cyan-400" },
+    { text: "true", color: "text-blue-500" },
+    { text: "0101", color: "text-slate-600" }
+  ];
+
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {terms.map((term, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, scale: 0.5, x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight }}
+          animate={{
+            opacity: [0, 0.4, 0],
+            y: [0, -100, 0],
+            scale: [0.8, 1.2, 0.8]
+          }}
+          transition={{
+            duration: 15 + Math.random() * 10,
+            repeat: Infinity,
+            delay: Math.random() * 5
+          }}
+          className={`absolute ${term.color} font-mono text-sm md:text-xl font-bold select-none blur-[0.5px]`}
+          style={{
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+            textShadow: '0 0 10px currentColor'
+          }}
+        >
+          {term.text}
+        </motion.div>
+      ))}
+    </div>
+  );
+};
 
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
+  // Spotlight Logic
+  let mouseX = useMotionValue(0);
+  let mouseY = useMotionValue(0);
+
+  function handleMouseMove({ currentTarget, clientX, clientY }) {
+    let { left, top } = currentTarget.getBoundingClientRect();
+    mouseX.set(clientX - left);
+    mouseY.set(clientY - top);
+  }
+
+  const noiseBg = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E")`;
+
+  // Grid Pattern
+  const gridBg = `linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)`;
+
+
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleScroll = () => setScrolled(window.scrollY > 30);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Update these links with your actual URLs
   const socialLinks = {
     github: "https://github.com/MarkDanielsMCraft",
-    linkedin: "https://www.linkedin.com/in/mark-daniels-mbaziira/",
+    linkedin: "https://www.linkedin.com/in/markdanielsm",
     email: "markdanielsmbaziira@gmail.com",
-    cvUrl: "/MARK_DANIELS_MBAZIIRA_CV.pdf" // Path to your hosted CV file
+    cvUrl: "/MARK_DANIELS_MBAZIIRA_CV.pdf"
   };
 
   const projects = [
     {
-      title: "StartGermany / Survival Kit",
+      title: "StartGermany",
+      subtitle: "Survival Kit",
       tag: "QA & Development",
-      description: "A comprehensive expat guide platform. I managed a high-risk migration to React 19, implementing rigorous manual verification protocols for dynamic UI logic.",
+      description: "Comprehensive expat guide platform. I helped migrate parts of the logic to React 19, learning how to implement rigorous verification protocols for dynamic UI.",
       tech: ["React 19", "ESLint", "Vite", "QA Automation"],
       link: "https://startgermany.vercel.app/",
       image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=800",
     },
     {
-      title: "Lyia Braids Platform",
+      title: "Lyia Braids",
+      subtitle: "Platform",
       tag: "UX & Testing",
-      description: "A professional service platform focused on frictionless booking. Conducted extensive cross-browser testing and mobile responsiveness validation.",
+      description: "Service platform project where I focused on frictionless booking flow. I practiced cross-browser testing and mobile responsiveness validation.",
       tech: ["Tailwind CSS", "UX Design", "GDPR Compliance"],
       link: "https://lyia-braids.vercel.app/",
       image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&q=80&w=800",
@@ -68,321 +180,471 @@ const App = () => {
       role: "Working Student - Data Quality",
       period: "Dec 2025 - Present",
       tasks: [
-        "Managing complex relational data for Kenya TVET cohorts.",
-        "Executing systematic consistency checks between attendance and status logs.",
-        "Ensuring 100% data integrity for critical program reporting."
+        "Learning to manage complex relational data for Kenya TVET cohorts.",
+        "Assist in executing consistency checks between attendance and status logs.",
+        "Reporting on data integrity issues for program stakeholders."
       ],
-      icon: <Database className="w-6 h-6 text-blue-400" />
+      icon: <Database className="w-5 h-5 text-blue-400" />
     },
     {
       company: "Study in Germany (DAAD)",
       role: "Volunteer Blogger",
       period: "Mar 2025 - Present",
       tasks: [
-        "Content QA: Verifying accuracy and clarity for an international audience.",
-        "Engaging 10k+ readers with structured academic and cultural insights."
+        "Content Support: Verifying accuracy and clarity for an international audience.",
+        "Sharing my student journey with 10k+ readers via structured insights."
       ],
-      icon: <Globe className="w-6 h-6 text-emerald-400" />
+      icon: <Globe className="w-5 h-5 text-emerald-400" />
     }
   ];
 
   const SkillBadge = ({ text, category }) => (
-    <span className={`px-3 py-1 text-sm rounded-full border ${category === 'test' ? 'bg-blue-500/10 border-blue-500/30 text-blue-400' :
-      category === 'tech' ? 'bg-indigo-500/10 border-indigo-500/30 text-indigo-400' :
-        'bg-slate-500/10 border-slate-500/30 text-slate-400'
+    <span className={`px-2.5 py-1 text-xs font-medium rounded-full border transition-colors cursor-default ${category === 'test' ? 'bg-blue-500/10 border-blue-500/20 text-blue-300 hover:bg-blue-500/20' :
+      category === 'tech' ? 'bg-indigo-500/10 border-indigo-500/20 text-indigo-300 hover:bg-indigo-500/20' :
+        'bg-slate-800/50 border-slate-700 text-slate-400'
       }`}>
       {text}
     </span>
   );
 
   return (
-    <div className="min-h-screen bg-[#05070a] text-slate-200 font-sans selection:bg-blue-500 selection:text-white scroll-smooth">
-      {/* Navigation */}
-      <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-[#05070a]/90 backdrop-blur-xl py-4 border-b border-white/5 shadow-2xl shadow-blue-900/10' : 'bg-transparent py-6'}`}>
-        <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-          <div className="text-xl font-bold tracking-tighter flex items-center gap-2 group cursor-pointer">
-            <div className="bg-blue-600 p-1.5 rounded-lg group-hover:rotate-12 transition-transform">
-              <Terminal className="w-5 h-5 text-white" />
-            </div>
-            <span>MARK.<span className="text-blue-500">M</span></span>
-          </div>
+    <div
+      className="min-h-screen bg-[#05070a] text-slate-200 font-sans selection:bg-blue-500 selection:text-white"
+      onMouseMove={handleMouseMove}
+    >
 
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium">
-            <a href="#about" className="hover:text-blue-400 transition-colors">About & CV</a>
-            <a href="#experience" className="hover:text-blue-400 transition-colors">Experience</a>
-            <a href="#projects" className="hover:text-blue-400 transition-colors">Work</a>
-            <a href={`mailto:${socialLinks.email}`} className="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-xl transition-all shadow-lg shadow-blue-600/20 active:scale-95">Contact Me</a>
-          </div>
+      {/* Background Layer */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        {/* Technical Grid Pattern */}
+        <div
+          className="absolute inset-0 z-[1] opacity-20"
+          style={{
+            backgroundImage: gridBg,
+            backgroundSize: '40px 40px'
+          }}
+        />
 
-          <button className="md:hidden p-2 bg-white/5 rounded-lg" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            {isMenuOpen ? <X /> : <Menu />}
-          </button>
-        </div>
-      </nav>
+        {/* Cinematic Noise */}
+        <div
+          className="absolute inset-0 z-[5] opacity-[0.04] mix-blend-overlay pointer-events-none"
+          style={{ backgroundImage: noiseBg }}
+        />
 
-      {/* Hero Section */}
-      <section className="relative pt-44 pb-32 px-6 overflow-hidden">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600/20 blur-[120px] rounded-full" />
-        <div className="absolute bottom-0 right-0 w-[30%] h-[30%] bg-indigo-600/10 blur-[100px] rounded-full" />
+        {/* Knowledge Particles (Floating Terms) */}
+        <BackgroundParticles />
 
-        <div className="max-w-7xl mx-auto text-center relative z-10">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-widest mb-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-            <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" /> Available for Remote QA Roles
-          </div>
-          <h1 className="text-6xl md:text-9xl font-black tracking-tight mb-8 bg-gradient-to-b from-white via-white to-slate-600 bg-clip-text text-transparent">
-            Precision <br className="hidden md:block" /> in Every Bit.
-          </h1>
-          <p className="max-w-2xl mx-auto text-lg md:text-xl text-slate-400 leading-relaxed mb-12">
-            I specialize in <span className="text-white font-medium underline decoration-blue-500 decoration-2 underline-offset-4">Manual Software Testing</span>.
-            From managing complex databases at Malengo to building React 19 apps, I ensure logic never fails the user.
-          </p>
+        {/* Mouse Spotlight */}
+        <motion.div
+          className="absolute inset-0 z-[2] opacity-50"
+          style={{
+            background: useMotionTemplate`
+              radial-gradient(
+                600px circle at ${mouseX}px ${mouseY}px,
+                rgba(255, 255, 255, 0.03),
+                transparent 80%
+              )
+            `,
+          }}
+        />
 
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            <a href="#projects" className="group flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-2xl font-bold transition-all shadow-xl shadow-blue-600/25 active:scale-95">
-              Explore Projects <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </a>
-            <div className="flex items-center gap-4">
-              <a href={socialLinks.github} target="_blank" className="p-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl transition-all hover:text-blue-400"><Github className="w-5 h-5" /></a>
-              <a href={socialLinks.linkedin} target="_blank" className="p-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl transition-all hover:text-blue-400"><Linkedin className="w-5 h-5" /></a>
-            </div>
-          </div>
-        </div>
-      </section>
+        {/* Ambient Glows - Reduced Intensity (More Deep Space) */}
+        <motion.div
+          animate={{ scale: [1, 1.1, 1], rotate: [0, 3, -3, 0] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          className="absolute top-[-10%] left-[-10%] w-[60vw] h-[60vw] bg-blue-900/20 rounded-full blur-[120px] mix-blend-screen"
+        />
+        <motion.div
+          animate={{ scale: [1, 1.2, 1], x: [0, 40, -40, 0] }}
+          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+          className="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-indigo-900/20 rounded-full blur-[100px] mix-blend-screen"
+        />
+      </div>
 
-      {/* About & CV Section */}
-      <section id="about" className="py-24 px-6 relative">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+      {/* Content Wrapper */}
+      <div className="relative z-10">
 
-            <div className="lg:col-span-5 space-y-8">
-              <div className="relative inline-block">
-                <div className="w-48 h-48 md:w-64 md:h-64 rounded-3xl overflow-hidden bg-slate-800 border-2 border-blue-500/30 p-1 shadow-2xl shadow-blue-500/10">
-                  <div className="w-full h-full bg-gradient-to-br from-blue-600/20 to-indigo-900/40 flex items-center justify-center">
-                    <User className="w-24 h-24 text-blue-500/40" />
-                  </div>
+        {/* Navigation */}
+        <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-[#05070a]/90 backdrop-blur-md py-4 border-b border-white/5 shadow-2xl shadow-blue-900/10' : 'bg-transparent py-6'}`}>
+          <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
+            <Magnetic>
+              <motion.div
+                initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}
+                className="text-lg font-bold tracking-tight flex items-center gap-2 group cursor-pointer"
+              >
+                <div className="bg-blue-600 p-1.5 rounded-lg group-hover:rotate-12 transition-transform shadow-lg shadow-blue-600/20">
+                  <Terminal className="w-4 h-4 text-white" />
                 </div>
-                <div className="absolute -bottom-4 -right-4 bg-blue-600 text-white p-3 rounded-2xl shadow-xl">
-                  <CheckCircle2 className="w-6 h-6" />
-                </div>
-              </div>
+                <span className="font-mono">MARK.<span className="text-blue-500">M</span></span>
+              </motion.div>
+            </Magnetic>
 
-              <div>
-                <h2 className="text-4xl font-black mb-6">About Me.</h2>
-                <div className="space-y-4 text-slate-400 leading-relaxed text-lg">
-                  <p>
-                    I am an <span className="text-white">International Information Systems</span> student at TH Augsburg with a unique dual perspective.
-                    I don't just "check" software; I understand the code architectures beneath it.
-                  </p>
-                  <p>
-                    Currently, I manage critical data infrastructure at <span className="text-white">Malengo</span>, where my "Tester's Mindset" was forged.
-                    When a tracking sheet for a scholar cohort shows a logic mismatch, I don't move on until I find the root cause.
-                  </p>
-                </div>
-                <div className="mt-8 pt-8 border-t border-white/5 grid grid-cols-2 gap-4">
-                  <div className="flex items-center gap-3 text-slate-400">
-                    <MapPin className="w-5 h-5 text-blue-500" /> <span>Augsburg / Remote</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-slate-400">
-                    <Globe className="w-5 h-5 text-blue-500" /> <span>Eng, De, Luganda</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="lg:col-span-7">
-              <div className="bg-white/[0.03] border border-white/10 rounded-[40px] p-8 md:p-12 relative overflow-hidden group shadow-2xl">
-                <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-10 transition-opacity">
-                  <FileText className="w-40 h-40 text-white" />
-                </div>
-
-                <div className="flex flex-col md:flex-row justify-between items-start mb-10 gap-6">
-                  <div>
-                    <h3 className="text-2xl font-bold mb-1">Mark Daniels Mbaziira</h3>
-                    <p className="text-blue-400 text-sm font-medium">B.Sc. Information Systems Student</p>
-                  </div>
-                  <div className="flex gap-3">
-                    {/* View CV - Opens in new tab */}
-                    <a href={socialLinks.cvUrl} target="_blank" className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-2xl text-sm font-bold transition-all shadow-lg shadow-blue-600/20">
-                      <Eye className="w-4 h-4" /> View CV
-                    </a>
-                    {/* Download CV - Direct download */}
-                    <a href={socialLinks.cvUrl} download className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-5 py-2.5 rounded-2xl text-sm font-bold transition-all border border-white/10">
-                      <Download className="w-4 h-4" /> Download
-                    </a>
-                  </div>
-                </div>
-
-                <div className="space-y-8">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="space-y-4">
-                      <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
-                        <Calendar className="w-4 h-4" /> Education
-                      </h4>
-                      <div className="p-4 rounded-2xl bg-white/5 border border-white/5 hover:border-blue-500/20 transition-all">
-                        <p className="font-bold text-white text-sm">TH Augsburg</p>
-                        <p className="text-slate-400 text-xs">B.Sc. International Info Systems</p>
-                        <p className="text-blue-500/60 text-[10px] mt-2 italic font-medium">2025 - Present</p>
-                      </div>
-                    </div>
-
-                    <div className="space-y-4">
-                      <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
-                        <Search className="w-4 h-4" /> Testing Expertise
-                      </h4>
-                      <div className="flex flex-wrap gap-2">
-                        <SkillBadge text="Regression Testing" category="test" />
-                        <SkillBadge text="Bug Documentation" category="test" />
-                        <SkillBadge text="UI/UX QA" category="test" />
-                        <SkillBadge text="Edge Cases" category="test" />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-4 pt-4">
-                    <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
-                      <Cpu className="w-4 h-4" /> Core Tech
-                    </h4>
-                    <div className="flex flex-wrap gap-3">
-                      <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 border border-white/5 text-sm">
-                        <div className="w-1.5 h-1.5 rounded-full bg-blue-500" /> React 19
-                      </div>
-                      <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 border border-white/5 text-sm">
-                        <div className="w-1.5 h-1.5 rounded-full bg-indigo-500" /> Java
-                      </div>
-                      <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 border border-white/5 text-sm">
-                        <div className="w-1.5 h-1.5 rounded-full bg-slate-500" /> SQL / CSV
-                      </div>
-                      <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 border border-white/5 text-sm">
-                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> GitHub Actions
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Experience Section */}
-      <section id="experience" className="py-24 px-6 bg-white/[0.01]">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-black mb-4 tracking-tight">Professional Path.</h2>
-            <div className="w-20 h-1 bg-blue-600 mx-auto rounded-full" />
-          </div>
-
-          <div className="space-y-12">
-            {experience.map((exp, idx) => (
-              <div key={idx} className="relative pl-12 border-l-2 border-white/5 group hover:border-blue-600 transition-colors">
-                <div className="absolute left-[-13px] top-0 p-2 bg-[#05070a] border-2 border-white/10 rounded-2xl group-hover:border-blue-600 group-hover:text-blue-500 transition-all">
-                  {exp.icon}
-                </div>
-                <div className="flex flex-col md:flex-row md:justify-between items-start mb-6">
-                  <div>
-                    <h4 className="text-2xl font-bold text-white mb-1">{exp.company}</h4>
-                    <p className="text-blue-400 font-semibold tracking-wide uppercase text-xs">{exp.role}</p>
-                  </div>
-                  <span className="text-xs font-bold text-slate-500 bg-white/5 px-3 py-1 rounded-lg mt-2 md:mt-0">{exp.period}</span>
-                </div>
-                <ul className="space-y-4">
-                  {exp.tasks.map((task, tidx) => (
-                    <li key={tidx} className="flex gap-4 text-slate-400 text-base leading-relaxed">
-                      <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500/40 flex-shrink-0" />
-                      {task}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Projects Section */}
-      <section id="projects" className="py-24 px-6 relative">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-            <div>
-              <h2 className="text-4xl font-black mb-4 tracking-tight">Technical Proof.</h2>
-              <p className="text-slate-400 text-lg">Real-world applications where I applied rigorous testing standards.</p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            {projects.map((project, idx) => (
-              <div key={idx} className="group relative rounded-[40px] overflow-hidden bg-white/[0.02] border border-white/10 hover:border-blue-500/40 transition-all duration-500 shadow-xl">
-                <div className="aspect-[16/10] overflow-hidden relative">
-                  <div className="absolute inset-0 bg-blue-900/20 group-hover:bg-transparent transition-colors z-10" />
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-60 group-hover:opacity-100"
-                  />
-                </div>
-                <div className="p-10 relative">
-                  <span className="text-blue-500 text-[10px] font-black uppercase tracking-[0.2em] mb-4 block">{project.tag}</span>
-                  <h3 className="text-3xl font-bold mb-4 group-hover:text-white transition-colors">{project.title}</h3>
-                  <p className="text-slate-400 text-sm leading-relaxed mb-8">{project.description}</p>
-                  <div className="flex flex-wrap gap-2 mb-10">
-                    {project.tech.map((t, i) => (
-                      <span key={i} className="text-[10px] px-2.5 py-1 bg-white/5 rounded-lg border border-white/5 text-slate-400 font-medium">{t}</span>
-                    ))}
-                  </div>
-                  <a href={project.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 bg-white/5 hover:bg-blue-600 hover:text-white px-6 py-3 rounded-2xl text-sm font-bold transition-all border border-white/5">
-                    View Live <ExternalLink className="w-4 h-4" />
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Call to Action Footer */}
-      <footer className="py-32 px-6 border-t border-white/5 relative">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-[1px] bg-gradient-to-r from-transparent via-blue-500/50 to-transparent" />
-
-        <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-5xl md:text-7xl font-black mb-10 tracking-tighter">Let's build <br className="sm:hidden" /> something <span className="text-blue-500">stable.</span></h2>
-          <p className="text-slate-400 mb-12 max-w-lg mx-auto text-lg leading-relaxed">
-            I am ready to bring my data validation habits and technical curiosity to your team.
-            Available for remote and on-site roles.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            <a href={`mailto:${socialLinks.email}`} className="inline-flex items-center gap-3 bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all shadow-2xl shadow-blue-600/30 active:scale-95">
-              <Mail className="w-6 h-6" /> Get in touch
-            </a>
-
-            <a
-              href="https://buymeacoffee.com/markdanielsmcraft"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 bg-white/5 hover:bg-[#FFDD00] hover:text-black text-slate-300 px-8 py-4 rounded-2xl font-bold text-lg transition-all border border-white/10 hover:border-[#FFDD00] active:scale-95 group"
+            <motion.div
+              initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }}
+              className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400"
             >
-              <Coffee className="w-6 h-6 group-hover:animate-bounce" />
-              <span>Fuel my work</span>
-            </a>
+              {['About', 'Experience', 'Work'].map((item) => (
+                <Magnetic key={item}>
+                  <a href={`#${item.toLowerCase()}`} className="hover:text-blue-400 transition-colors relative group block px-2 py-1">
+                    {item}
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-500 transition-all group-hover:w-full" />
+                  </a>
+                </Magnetic>
+              ))}
+              <Magnetic>
+                <a href={`mailto:${socialLinks.email}`} className="block bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-xl transition-all shadow-lg shadow-blue-600/20 hover:shadow-blue-600/40 active:scale-95">
+                  Contact Me
+                </a>
+              </Magnetic>
+            </motion.div>
+
+            <button className="md:hidden p-2 bg-white/5 rounded-lg text-slate-300" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+              {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
+        </nav>
+
+        {/* Hero Section */}
+        <section className="relative min-h-[90vh] flex flex-col justify-center px-6 pt-20">
+          <div className="max-w-6xl mx-auto w-full grid md:grid-cols-2 gap-12 items-center">
+
+            <motion.div
+              initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, ease: "easeOut" }}
+            >
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[11px] font-bold uppercase tracking-widest mb-6 backdrop-blur-md">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                </span>
+                Seeking Working Student Roles
+              </div>
+
+              <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-6 text-white leading-[1.1] drop-shadow-lg">
+                Building Systems. <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500 filter drop-shadow-lg">Mastering Logic.</span>
+              </h1>
+
+              <p className="max-w-xl text-lg text-slate-400 leading-relaxed mb-8">
+                I am an <span className="text-slate-200 font-semibold underline decoration-blue-500/50 decoration-2 underline-offset-4">Information Systems Student</span> at TH Augsburg.
+                Currently exploring the intersection of Data Quality and Frontend Development.
+              </p>
+
+              <div className="flex flex-wrap gap-4">
+                <Magnetic>
+                  <a href="#projects" className="group flex items-center gap-2 bg-white text-black hover:bg-blue-50 px-6 py-3.5 rounded-xl font-bold transition-all shadow-xl shadow-white/5 hover:shadow-white/10 active:scale-95">
+                    See My Progress <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </a>
+                </Magnetic>
+                <div className="flex items-center gap-3">
+                  <Magnetic>
+                    <a href={socialLinks.github} target="_blank" className="block p-3.5 bg-white/5 hover:bg-white/10 border border-white/5 rounded-xl transition-all hover:border-white/20 text-slate-400 hover:text-white"><Github className="w-5 h-5" /></a>
+                  </Magnetic>
+                  <Magnetic>
+                    <a href={socialLinks.linkedin} target="_blank" className="block p-3.5 bg-white/5 hover:bg-white/10 border border-white/5 rounded-xl transition-all hover:border-white/20 text-slate-400 hover:text-white"><Linkedin className="w-5 h-5" /></a>
+                  </Magnetic>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Hero Visual - Code Snapshot */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.2 }}
+              className="relative hidden md:block perspective-1000"
+            >
+              <motion.div
+                animate={{ y: [0, -15, 0], rotateX: [0, 2, 0], rotateY: [0, -2, 0] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                className="relative bg-black/40 border border-white/10 backdrop-blur-xl rounded-2xl p-6 shadow-2xl"
+              >
+                <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 rounded-2xl blur opacity-30" />
+
+                <div className="flex items-center gap-2 mb-4 border-b border-white/5 pb-4 relative z-10">
+                  <div className="flex gap-1.5">
+                    <div className="w-3 h-3 rounded-full bg-red-500/50" />
+                    <div className="w-3 h-3 rounded-full bg-yellow-500/50" />
+                    <div className="w-3 h-3 rounded-full bg-green-500/50" />
+                  </div>
+                  <div className="text-xs text-slate-500 font-mono ml-2">university_project.java</div>
+                </div>
+                <div className="space-y-3 font-mono text-sm relative z-10">
+                  <div className="text-slate-500">// Learning Algorithms in Java</div>
+                  <div className="pl-0 flex gap-4">
+                    <span className="text-purple-400">public class</span> <span className="text-yellow-200">Portfolio</span> {'{'}
+                  </div>
+                  <div className="pl-6 flex gap-4">
+                    <span className="text-purple-400">public static void</span> <span className="text-blue-400">main</span>(String[] args) {'{'}
+                  </div>
+                  <div className="pl-12 flex gap-4">
+                    <span className="text-purple-400">Student</span> <span className="text-white">me</span> = <span className="text-purple-400">new</span> <span className="text-yellow-200">Student</span>("Mark");
+                  </div>
+                  <div className="pl-12 flex gap-4">
+                    <span className="text-white">me</span>.<span className="text-blue-400">keepLearning</span>();
+                  </div>
+                  <div className="pl-12 flex gap-4">
+                    <span className="text-purple-400">System</span>.out.println(<span className="text-green-300">"Build. Break. Fix. Repeat."</span>);
+                  </div>
+                  <div className="pl-6 text-slate-500">{'}'}</div>
+                  <div className="text-slate-500">{'}'}</div>
+                </div>
+              </motion.div>
+            </motion.div>
+
           </div>
 
-          <div className="mt-20 p-6 rounded-2xl bg-gradient-to-r from-blue-900/20 to-purple-900/20 border border-white/5 max-w-2xl mx-auto">
-            <p className="text-slate-400 text-sm italic">
-              "If you value precision and want to support my open-source contributions or my journey in tech, a coffee goes a long way in keeping the logic bug-free."
-            </p>
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1, duration: 1 }}
+            className="absolute bottom-10 left-1/2 -translate-x-1/2 text-slate-500 animate-bounce cursor-pointer"
+            onClick={() => document.getElementById('about').scrollIntoView({ behavior: 'smooth' })}
+          >
+            <div className="w-[1px] h-12 bg-gradient-to-b from-transparent via-slate-500 to-transparent mx-auto" />
+          </motion.div>
+        </section>
 
-          <div className="mt-32 flex flex-col md:flex-row justify-between items-center gap-10 border-t border-white/5 pt-12">
-            <div className="text-left">
-              <p className="text-slate-200 font-bold text-lg mb-1">MARK DANIELS MBAZIIRA</p>
-              <p className="text-slate-500 text-sm">© 2026 Crafted with precision and React 19.</p>
-            </div>
-            <div className="flex gap-4">
-              <a href={socialLinks.github} target="_blank" className="p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all"><Github className="w-5 h-5 text-slate-400 hover:text-white" /></a>
-              <a href={socialLinks.linkedin} target="_blank" className="p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all"><Linkedin className="w-5 h-5 text-slate-400 hover:text-white" /></a>
+        {/* Bento Grid - About/Student Life */}
+        <section id="about" className="py-20 px-6 relative">
+          <div className="max-w-6xl mx-auto">
+            <RevealOnScroll>
+              <h2 className="text-3xl font-bold mb-10 flex items-center gap-3">
+                <User className="text-blue-500" /> Student Profile
+              </h2>
+            </RevealOnScroll>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+              {/* Main Bio */}
+              <RevealOnScroll>
+                <div className="md:col-span-2 bg-slate-900/40 border border-white/5 rounded-3xl p-8 h-full hover:border-blue-500/30 transition-all backdrop-blur-md group hover:bg-slate-900/60">
+                  <p className="text-lg text-slate-300 leading-relaxed mb-6 group-hover:text-slate-200 transition-colors">
+                    I am an <strong>International Information Systems student</strong> based in Augsburg, Germany. My studies bridge the gap between business logic and technical implementation.
+                  </p>
+                  <p className="text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors">
+                    I don't claim to be an expert yet. I'm a builder who breaks things to learn how they work. At <span className="text-white font-semibold">Malengo</span>, I apply what I learn in class to real-world data problems.
+                  </p>
+                  <div className="mt-8 flex gap-6 text-sm font-medium text-slate-500">
+                    <span className="flex items-center gap-2 px-3 py-1 bg-white/5 rounded-full"><MapPin size={14} className="text-blue-400" /> TH Augsburg</span>
+                    <span className="flex items-center gap-2 px-3 py-1 bg-white/5 rounded-full"><Globe size={14} className="text-emerald-400" /> Eng, De, Luganda</span>
+                  </div>
+                </div>
+              </RevealOnScroll>
+
+              {/* Stats/Resume */}
+              <RevealOnScroll delay={0.2}>
+                <div className="bg-gradient-to-br from-blue-900/10 to-indigo-900/10 border border-white/5 rounded-3xl p-8 flex flex-col justify-between h-full hover:shadow-2xl hover:shadow-blue-900/10 transition-all relative overflow-hidden group">
+                  <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="relative z-10">
+                    <div className="w-12 h-12 bg-blue-600/20 rounded-xl flex items-center justify-center mb-4 text-blue-400"><FileText size={24} /></div>
+                    <h3 className="text-xl font-bold text-white mb-1">My CV</h3>
+                    <p className="text-sm text-slate-400">See my coursework & projects.</p>
+                  </div>
+                  <div className="flex gap-2 mt-6 relative z-10">
+                    <Magnetic>
+                      <a href={socialLinks.cvUrl} target="_blank" className="block w-full bg-white text-black py-2.5 px-4 rounded-lg text-center font-bold text-sm hover:bg-blue-50 transition-colors flex items-center justify-center gap-2 group">
+                        View <ExternalLink size={14} className="group-hover:translate-x-0.5 transition-transform" />
+                      </a>
+                    </Magnetic>
+                    <Magnetic>
+                      <a href={socialLinks.cvUrl} download className="block px-3 py-2.5 bg-white/10 rounded-lg hover:bg-white/20 transition-colors text-white">
+                        <Download size={18} />
+                      </a>
+                    </Magnetic>
+                  </div>
+                </div>
+              </RevealOnScroll>
+
+              {/* Tech Stack */}
+              <RevealOnScroll delay={0.3}>
+                <div className="md:col-span-3 bg-slate-900/30 border border-white/5 rounded-3xl p-8 backdrop-blur-sm relative overflow-hidden hover:border-white/10 transition-colors">
+                  <h3 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-6 flex items-center gap-2"><Cpu size={16} /> What I'm Learning</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
+                    <div>
+                      <h4 className="text-white font-medium mb-3 text-sm">Coursework & Code</h4>
+                      <div className="flex flex-wrap gap-2">
+                        <SkillBadge text="Java (OOP)" category="tech" />
+                        <SkillBadge text="SQL / Databases" category="tech" />
+                        <SkillBadge text="Business Process Modeling" category="tech" />
+                        <SkillBadge text="React 19" category="tech" />
+                        <SkillBadge text="Git" category="tech" />
+                      </div>
+                    </div>
+                    <div>
+                      <h4 className="text-white font-medium mb-3 text-sm">QA & Testing</h4>
+                      <div className="flex flex-wrap gap-2">
+                        <SkillBadge text="Manual Testing" category="test" />
+                        <SkillBadge text="Bug Reporting" category="test" />
+                        <SkillBadge text="User Acceptance Testing" category="test" />
+                        <SkillBadge text="Data Verification" category="test" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </RevealOnScroll>
+
             </div>
           </div>
-        </div>
-      </footer>
+        </section>
+
+        {/* Experience */}
+        <section id="experience" className="py-20 px-6 bg-white/[0.01]">
+          <div className="max-w-4xl mx-auto">
+            <RevealOnScroll>
+              <h2 className="text-3xl font-bold mb-12 flex items-center gap-3"><Calendar className="text-blue-500" /> Student Work</h2>
+            </RevealOnScroll>
+
+            <div className="space-y-12">
+              {experience.map((exp, idx) => (
+                <RevealOnScroll key={idx} delay={idx * 0.1}>
+                  <div className="relative pl-8 md:pl-0">
+                    {/* Timeline Line */}
+                    <div className="absolute left-0 top-2 bottom-0 w-px bg-white/10 md:left-[140px]" />
+
+                    <div className="md:flex gap-12 group">
+                      <div className="hidden md:block w-[140px] text-right flex-shrink-0 pt-1">
+                        <span className="text-sm font-bold text-slate-500 group-hover:text-blue-400 transition-colors">{exp.period}</span>
+                      </div>
+
+                      <div className="relative flex-1 bg-slate-900/20 border border-white/5 p-6 rounded-2xl hover:border-blue-500/30 transition-all hover:bg-slate-900/40 backdrop-blur-sm">
+                        {/* Dot */}
+                        <div className="absolute left-[-37px] top-6 w-3 h-3 rounded-full bg-slate-800 border-2 border-slate-600 group-hover:bg-blue-500 group-hover:border-blue-300 transition-colors md:left-[-55px]" />
+
+                        <div className="flex justify-between items-start mb-4">
+                          <div>
+                            <h3 className="text-xl font-bold text-white mb-1">{exp.company}</h3>
+                            <p className="text-blue-400 font-medium text-sm">{exp.role}</p>
+                          </div>
+                          <div className="p-2 bg-white/5 rounded-lg text-slate-400 group-hover:text-white transition-colors">{exp.icon}</div>
+                        </div>
+
+                        <ul className="space-y-3">
+                          {exp.tasks.map((task, i) => (
+                            <li key={i} className="text-slate-400 text-sm leading-relaxed flex gap-3 group-hover:text-slate-300 transition-colors">
+                              <ChevronRight size={14} className="mt-1 flex-shrink-0 text-slate-600 group-hover:text-blue-500 transition-colors" />
+                              {task}
+                            </li>
+                          ))}
+                        </ul>
+
+                        {/* Mobile Period */}
+                        <div className="md:hidden mt-4 pt-4 border-t border-white/5">
+                          <span className="text-xs font-bold text-slate-500">{exp.period}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </RevealOnScroll>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Projects */}
+        <section id="projects" className="py-24 px-6 relative">
+          <div className="max-w-6xl mx-auto">
+            <RevealOnScroll>
+              <h2 className="text-3xl font-bold mb-12 flex items-center gap-3"><Code2 className="text-blue-500" /> Academic & Side Projects</h2>
+            </RevealOnScroll>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {projects.map((project, idx) => (
+                <RevealOnScroll key={idx} delay={idx * 0.2}>
+                  <motion.div
+                    whileHover={{ y: -8 }}
+                    className="group bg-slate-900/40 border border-white/5 rounded-3xl overflow-hidden hover:shadow-2xl hover:shadow-blue-900/20 transition-all backdrop-blur-md"
+                  >
+                    <div className="relative h-56 overflow-hidden">
+                      <div className="absolute inset-0 bg-blue-900/20 group-hover:bg-transparent transition-colors z-10" />
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 opacity-80 group-hover:opacity-100"
+                      />
+                      <div className="absolute bottom-4 left-4 z-20">
+                        <span className="bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1 rounded-full border border-white/10 uppercase tracking-widest shadow-lg">
+                          {project.tag}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="p-8">
+                      <div className="flex justify-between items-start mb-4">
+                        <div>
+                          <h3 className="text-2xl font-bold text-white group-hover:text-blue-400 transition-colors">{project.title}</h3>
+                          <p className="text-sm text-slate-500 font-medium group-hover:text-slate-400 transition-colors">{project.subtitle}</p>
+                        </div>
+                        <Magnetic>
+                          <a href={project.link} target="_blank" className="block p-3 bg-white/5 rounded-xl text-slate-400 hover:text-white hover:bg-blue-600 transition-all shadow-lg">
+                            <ExternalLink size={18} />
+                          </a>
+                        </Magnetic>
+                      </div>
+
+                      <p className="text-slate-400 leading-relaxed mb-6 text-sm">{project.description}</p>
+
+                      <div className="flex flex-wrap gap-2">
+                        {project.tech.map((t, i) => (
+                          <span key={i} className="text-[10px] px-2.5 py-1 bg-white/5 rounded-lg text-slate-400 border border-white/5 group-hover:border-white/10 group-hover:text-slate-300 transition-colors">
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
+                </RevealOnScroll>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="py-24 px-6 border-t border-white/5 relative overflow-hidden">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[1px] bg-gradient-to-r from-transparent via-blue-500/30 to-transparent" />
+          <div className="absolute inset-0 bg-blue-900/5 blur-[100px] pointer-events-none" />
+
+          <div className="max-w-4xl mx-auto text-center relative z-10">
+            <RevealOnScroll>
+              <h2 className="text-4xl md:text-5xl font-black mb-8 tracking-tight">Let's build something <span className="text-blue-500">stable.</span></h2>
+              <p className="text-slate-400 mb-10 max-w-lg mx-auto text-lg leading-relaxed">
+                Currently looking for <strong>Working Student</strong> positions in Data, QA, or Web Dev.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
+                <Magnetic>
+                  <a
+                    href={`mailto:${socialLinks.email}`}
+                    className="flex items-center gap-3 bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-xl shadow-blue-600/20 active:scale-95 transition-all"
+                  >
+                    <Mail size={20} /> Get in touch
+                  </a>
+                </Magnetic>
+
+                <Magnetic>
+                  <a
+                    href="https://buymeacoffee.com/markdanielsmcraft"
+                    target="_blank"
+                    className="flex items-center gap-3 bg-white/5 hover:bg-[#FFDD00] hover:text-black text-slate-300 px-8 py-4 rounded-2xl font-bold text-lg border border-white/10 hover:border-[#FFDD00] transition-all group active:scale-95"
+                  >
+                    <Coffee size={20} className="group-hover:animate-bounce" />
+                    <span>Fuel my studies</span>
+                  </a>
+                </Magnetic>
+              </div>
+
+              <div className="bg-slate-900/50 border border-white/5 rounded-2xl p-6 max-w-2xl mx-auto backdrop-blur-sm mb-16 hover:border-white/10 transition-colors">
+                <p className="text-sm text-slate-500 italic">
+                  "Every coffee helps me buy more textbooks (and debug more code)."
+                </p>
+              </div>
+
+              <div className="flex flex-col md:flex-row justify-between items-center text-sm text-slate-600 border-t border-white/5 pt-8">
+                <p>© 2026 Mark Daniels Mbaziira. Built with React 19.</p>
+                <div className="flex gap-6 mt-4 md:mt-0">
+                  <a href={socialLinks.linkedin} className="hover:text-blue-400 transition-colors">LinkedIn</a>
+                  <a href={socialLinks.github} className="hover:text-blue-400 transition-colors">GitHub</a>
+                </div>
+              </div>
+            </RevealOnScroll>
+          </div>
+        </footer>
+
+      </div>
     </div>
   );
 };
