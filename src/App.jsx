@@ -333,9 +333,9 @@ const App = () => {
             }}
           />
 
-          {/* Cinematic Noise */}
+          {/* Cinematic Noise - Reduced Opacity for Clarity */}
           <div
-            className="absolute inset-0 z-[5] opacity-[0.04] mix-blend-overlay pointer-events-none"
+            className="absolute inset-0 z-[5] opacity-[0.02] mix-blend-overlay pointer-events-none"
             style={{ backgroundImage: noiseBg }}
           />
 
@@ -344,7 +344,7 @@ const App = () => {
 
           {/* Mouse Spotlight */}
           <motion.div
-            className="absolute inset-0 z-[2] opacity-50"
+            className="absolute inset-0 z-[2] opacity-40"
             style={{
               background: useMotionTemplate`
               radial-gradient(
@@ -360,12 +360,12 @@ const App = () => {
           <motion.div
             animate={{ scale: [1, 1.1, 1], rotate: [0, 3, -3, 0] }}
             transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            className="absolute top-[-10%] left-[-10%] w-[60vw] h-[60vw] bg-blue-900/20 rounded-full blur-[120px] mix-blend-screen"
+            className="absolute top-[-10%] left-[-10%] w-[60vw] h-[60vw] bg-blue-900/15 rounded-full blur-[120px] mix-blend-screen"
           />
           <motion.div
             animate={{ scale: [1, 1.2, 1], x: [0, 40, -40, 0] }}
             transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-            className="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-indigo-900/20 rounded-full blur-[100px] mix-blend-screen"
+            className="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-indigo-900/15 rounded-full blur-[100px] mix-blend-screen"
           />
         </div>
 
@@ -373,18 +373,18 @@ const App = () => {
         <div className="relative z-10">
 
           {/* Navigation */}
-          <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-[#050B14]/80 backdrop-blur-xl border-b border-white/5 py-4' : 'bg-transparent py-6'}`}>
+          <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-[#050B14]/90 backdrop-blur-xl border-b border-white/5 py-4' : 'bg-transparent py-6'}`}>
             <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
               <Magnetic>
                 <a href="#" className="text-xl font-bold text-white tracking-tight flex items-center gap-2 group">
-                  <span className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-600/20 group-hover:scale-110 transition-transform">M</span>
-                  <span className="group-hover:text-blue-400 transition-colors">Mark Daniels</span>
+                  {/* Reverted Logo to Pure Text as requested */}
+                  <span className="group-hover:text-blue-400 transition-colors">Mark Daniels<span className="text-blue-500">.</span></span>
                 </a>
               </Magnetic>
 
               <motion.div
                 initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }}
-                className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400"
+                className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300"
               >
                 {['About', 'Experience', 'Projects'].map((item) => (
                   <Magnetic key={item}>
@@ -419,7 +419,7 @@ const App = () => {
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
                   </span>
-                  Seeking Working Student Roles
+                  Available for Data & Systems Engineering
                 </div>
 
                 <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-6 text-white leading-[1.1] drop-shadow-lg">
@@ -429,23 +429,22 @@ const App = () => {
                   </span>
                 </h1>
 
-                <p className="max-w-xl text-lg text-slate-400 leading-relaxed mb-8">
-                  I am an <span className="text-slate-200 font-semibold underline decoration-blue-500/50 decoration-2 underline-offset-4">Information Systems Student</span> at TH Augsburg.
-                  Experienced in validating complex relational data and testing modern web applications.
+                <p className="max-w-xl text-lg text-slate-300 leading-relaxed mb-8">
+                  I bridge the gap between technical complexity and business logic. Meticulous, data-driven, and built for precision.
                 </p>
 
                 <div className="flex flex-wrap gap-4">
                   <Magnetic>
                     <a href="#projects" className="group flex items-center gap-2 bg-white text-black hover:bg-blue-50 px-6 py-3.5 rounded-xl font-bold transition-all shadow-xl shadow-white/5 hover:shadow-white/10 active:scale-95">
-                      See My Progress <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      View Projects <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </a>
                   </Magnetic>
                   <div className="flex items-center gap-3">
                     <Magnetic>
-                      <a href="https://github.com/MarkDanielsMCraft" target="_blank" className="block p-3.5 bg-white/5 hover:bg-white/10 border border-white/5 rounded-xl transition-all hover:border-white/20 text-slate-400 hover:text-white"><Github className="w-5 h-5" /></a>
+                      <a href="https://github.com/MarkDanielsMCraft" target="_blank" className="block p-3.5 bg-white/5 hover:bg-white/10 border border-white/5 rounded-xl transition-all hover:border-white/20 text-slate-300 hover:text-white"><Github className="w-5 h-5" /></a>
                     </Magnetic>
                     <Magnetic>
-                      <a href="https://www.linkedin.com/in/markdanielsm" target="_blank" className="block p-3.5 bg-white/5 hover:bg-white/10 border border-white/5 rounded-xl transition-all hover:border-white/20 text-slate-400 hover:text-white"><Linkedin className="w-5 h-5" /></a>
+                      <a href="https://www.linkedin.com/in/markdanielsm" target="_blank" className="block p-3.5 bg-white/5 hover:bg-white/10 border border-white/5 rounded-xl transition-all hover:border-white/20 text-slate-300 hover:text-white"><Linkedin className="w-5 h-5" /></a>
                     </Magnetic>
                   </div>
                 </div>
@@ -456,7 +455,7 @@ const App = () => {
                 initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.2 }}
                 className="relative hidden md:block perspective-1000"
               >
-                <TiltCard className="relative bg-black/40 border border-white/10 backdrop-blur-xl rounded-2xl p-6 shadow-2xl">
+                <TiltCard className="relative bg-[#0a101f]/90 border border-white/10 backdrop-blur-xl rounded-2xl p-6 shadow-2xl">
                   <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 rounded-2xl blur opacity-30" />
 
                   <div className="flex items-center gap-2 mb-4 border-b border-white/5 pb-4 relative z-10">
@@ -465,10 +464,10 @@ const App = () => {
                       <div className="w-3 h-3 rounded-full bg-yellow-500/50" />
                       <div className="w-3 h-3 rounded-full bg-green-500/50" />
                     </div>
-                    <div className="text-xs text-slate-500 font-mono ml-2">university_project.java</div>
+                    <div className="text-xs text-slate-400 font-mono ml-2">university_project.java</div>
                   </div>
                   <div className="space-y-3 font-mono text-sm relative z-10">
-                    <div className="text-slate-500">// Learning Algorithms in Java</div>
+                    <div className="text-slate-400">// Learning Algorithms in Java</div>
                     <div className="pl-0 flex gap-4">
                       <span className="text-purple-400">public class</span> <span className="text-yellow-200">Portfolio</span> {'{'}
                     </div>
@@ -484,8 +483,8 @@ const App = () => {
                     <div className="pl-12 flex gap-4">
                       <span className="text-purple-400">System</span>.out.println(<span className="text-green-300">"Build. Break. Fix. Repeat."</span>);
                     </div>
-                    <div className="pl-6 text-slate-500">{'}'}</div>
-                    <div className="text-slate-500">{'}'}</div>
+                    <div className="pl-6 text-slate-400">{'}'}</div>
+                    <div className="text-slate-400">{'}'}</div>
                   </div>
                 </TiltCard>
               </motion.div>
@@ -494,10 +493,10 @@ const App = () => {
 
             <motion.div
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1, duration: 1 }}
-              className="absolute bottom-10 left-1/2 -translate-x-1/2 text-slate-500 animate-bounce cursor-pointer"
+              className="absolute bottom-10 left-1/2 -translate-x-1/2 text-slate-400 animate-bounce cursor-pointer"
               onClick={() => document.getElementById('about').scrollIntoView({ behavior: 'smooth' })}
             >
-              <div className="w-[1px] h-12 bg-gradient-to-b from-transparent via-slate-500 to-transparent mx-auto" />
+              <div className="w-[1px] h-12 bg-gradient-to-b from-transparent via-slate-400 to-transparent mx-auto" />
             </motion.div>
           </section>
 
@@ -514,14 +513,14 @@ const App = () => {
 
                 {/* Main Bio */}
                 <RevealOnScroll>
-                  <TiltCard className="md:col-span-2 bg-slate-900/40 border border-white/5 rounded-3xl p-8 h-full hover:border-blue-500/30 transition-all backdrop-blur-md group hover:bg-slate-900/60">
-                    <p className="text-lg text-slate-300 leading-relaxed mb-6 group-hover:text-slate-200 transition-colors">
+                  <TiltCard className="md:col-span-2 bg-[#0a101f]/80 border border-white/5 rounded-3xl p-8 h-full hover:border-blue-500/30 transition-all backdrop-blur-md group hover:bg-[#0a101f]">
+                    <p className="text-lg text-slate-200 leading-relaxed mb-6 group-hover:text-white transition-colors">
                       I am an <strong>International Information Systems student</strong> based in Augsburg, Germany. My studies bridge the gap between business logic and technical implementation.
                     </p>
-                    <p className="text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors">
+                    <p className="text-slate-300 leading-relaxed group-hover:text-slate-200 transition-colors">
                       I look to apply my structured work style and technical understanding to manual software testing. At <span className="text-white font-semibold">Malengo</span>, I manage complex data and ensure integrity for reporting.
                     </p>
-                    <div className="mt-8 flex gap-6 text-sm font-medium text-slate-500">
+                    <div className="mt-8 flex gap-6 text-sm font-medium text-slate-400">
                       <span className="flex items-center gap-2 px-3 py-1 bg-white/5 rounded-full"><MapPin size={14} className="text-blue-400" /> TH Augsburg</span>
                       <span className="flex items-center gap-2 px-3 py-1 bg-white/5 rounded-full"><Globe size={14} className="text-emerald-400" /> Eng, De, Luganda</span>
                     </div>
@@ -554,8 +553,8 @@ const App = () => {
 
                 {/* Tech Stack */}
                 <RevealOnScroll delay={0.3}>
-                  <TiltCard className="md:col-span-3 bg-slate-900/30 border border-white/5 rounded-3xl p-8 backdrop-blur-sm relative overflow-hidden hover:border-white/10 transition-colors">
-                    <h3 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-6 flex items-center gap-2"><Cpu size={16} /> What I'm Learning</h3>
+                  <TiltCard className="md:col-span-3 bg-[#0a101f]/80 border border-white/5 rounded-3xl p-8 backdrop-blur-sm relative overflow-hidden hover:border-white/10 transition-colors">
+                    <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400 mb-6 flex items-center gap-2"><Cpu size={16} /> What I'm Learning</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
                       <div>
                         <h4 className="text-white font-medium mb-3 text-sm">Coursework & Code</h4>
@@ -748,7 +747,8 @@ const App = () => {
 
         </div>
       </div>
-      );
+    </ReactLenis>
+  );
 };
 
-      export default App;
+export default App;
