@@ -22,3 +22,13 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Security
+.env
+.env.local
+.env.*.local
+
+# OS Generated
+Thumbs.db
+ehthumbs.db
+Desktop.ini
