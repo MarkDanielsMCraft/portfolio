@@ -419,7 +419,7 @@ const App = () => {
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
                   </span>
-                  Available for Data & Systems Engineering
+                  Seeking Working Student Roles
                 </div>
 
                 <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-6 text-white leading-[1.1] drop-shadow-lg">
@@ -436,7 +436,7 @@ const App = () => {
                 <div className="flex flex-wrap gap-4">
                   <Magnetic>
                     <a href="#projects" className="group flex items-center gap-2 bg-white text-black hover:bg-blue-50 px-6 py-3.5 rounded-xl font-bold transition-all shadow-xl shadow-white/5 hover:shadow-white/10 active:scale-95">
-                      View Projects <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      See My Progress <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </a>
                   </Magnetic>
                   <div className="flex items-center gap-3">
