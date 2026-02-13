@@ -21,7 +21,8 @@ import {
   FileText,
   MapPin,
   Calendar,
-  Eye
+  Eye,
+  Coffee
 } from 'lucide-react';
 
 const App = () => {
@@ -87,8 +88,8 @@ const App = () => {
 
   const SkillBadge = ({ text, category }) => (
     <span className={`px-3 py-1 text-sm rounded-full border ${category === 'test' ? 'bg-blue-500/10 border-blue-500/30 text-blue-400' :
-        category === 'tech' ? 'bg-indigo-500/10 border-indigo-500/30 text-indigo-400' :
-          'bg-slate-500/10 border-slate-500/30 text-slate-400'
+      category === 'tech' ? 'bg-indigo-500/10 border-indigo-500/30 text-indigo-400' :
+        'bg-slate-500/10 border-slate-500/30 text-slate-400'
       }`}>
       {text}
     </span>
@@ -348,9 +349,27 @@ const App = () => {
             I am ready to bring my data validation habits and technical curiosity to your team.
             Available for remote and on-site roles.
           </p>
-          <a href={`mailto:${socialLinks.email}`} className="inline-flex items-center gap-3 bg-blue-600 hover:bg-blue-500 text-white px-12 py-5 rounded-2xl font-bold text-lg transition-all shadow-2xl shadow-blue-600/30 active:scale-95">
-            <Mail className="w-6 h-6" /> Get in touch
-          </a>
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+            <a href={`mailto:${socialLinks.email}`} className="inline-flex items-center gap-3 bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all shadow-2xl shadow-blue-600/30 active:scale-95">
+              <Mail className="w-6 h-6" /> Get in touch
+            </a>
+
+            <a
+              href="https://buymeacoffee.com/markdanielsmcraft"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-3 bg-white/5 hover:bg-[#FFDD00] hover:text-black text-slate-300 px-8 py-4 rounded-2xl font-bold text-lg transition-all border border-white/10 hover:border-[#FFDD00] active:scale-95 group"
+            >
+              <Coffee className="w-6 h-6 group-hover:animate-bounce" />
+              <span>Fuel my work</span>
+            </a>
+          </div>
+
+          <div className="mt-20 p-6 rounded-2xl bg-gradient-to-r from-blue-900/20 to-purple-900/20 border border-white/5 max-w-2xl mx-auto">
+            <p className="text-slate-400 text-sm italic">
+              "If you value precision and want to support my open-source contributions or my journey in tech, a coffee goes a long way in keeping the logic bug-free."
+            </p>
+          </div>
 
           <div className="mt-32 flex flex-col md:flex-row justify-between items-center gap-10 border-t border-white/5 pt-12">
             <div className="text-left">
