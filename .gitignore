@@ -27,8 +27,12 @@ dist-ssr
 .env
 .env.local
 .env.*.local
+/public/MARK_DANIELS_MBAZIIRA_CV.pdf
 
 # OS Generated
 Thumbs.db
 ehthumbs.db
 Desktop.ini
+
+# Private assets
+IMG_1706 Copy Copy.JPG

@@ -1,14 +1,21 @@
 # Mark Daniels Mbaziira - Portfolio
 
-Welcome to the source code of my personal portfolio website.
+Modern portfolio for an International Information Systems student focused on QA, data validation, backend logic, and reliable web delivery.
 
-This project is built with **React**, **Vite**, and **Tailwind CSS**. It showcases my professional experience in manual software testing, QA, and development.
+## Highlights
+
+- Bilingual EN/DE UI with language toggle
+- Light/dark theme support
+- Case studies with QA report previews
+- Privacy-first CV access (request via email)
 
 ## Tech Stack
 
 - **Framework**: [React 19](https://react.dev/) via [Vite](https://vitejs.dev/)
 - **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
 - **Icons**: [Lucide React](https://lucide.dev/)
+- **Motion**: [Framer Motion](https://www.framer.com/motion/)
+- **Smooth Scroll**: [Lenis](https://lenis.studio/)
 - **Deployment**: [Vercel](https://vercel.com) (Recommended)
 
 ## Development
@@ -30,6 +37,37 @@ To run this project locally:
     ```bash
     npm run dev
     ```
+
+## Project Structure
+
+```
+public/
+    logo.png
+    og-image.png
+src/
+    App.jsx
+    index.css
+    main.jsx
+index.html
+```
+
+## Deployment
+
+1. Build the site:
+     ```bash
+     npm run build
+     ```
+2. Preview locally:
+     ```bash
+     npm run preview
+     ```
+
+Vercel is the recommended host for zero-config deployment.
+
+## Privacy
+
+- The CV is shared on request to protect personal details.
+- Private assets and local secrets should stay out of version control.
 
 ## License
 

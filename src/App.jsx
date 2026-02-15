@@ -1,54 +1,52 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
+  ArrowUpRight,
+  Calendar,
+  ChevronRight,
+  Clock,
+  Coffee,
+  Cpu,
+  Database,
+  Download,
+  ExternalLink,
+  FileText,
   Github,
+  Globe,
+  Layout,
   Linkedin,
   Mail,
-  ChevronRight,
-  Code,
-  Database,
-  Layout,
-  Server,
-  Terminal,
-  Cpu,
-  Coffee,
-  ExternalLink,
-  Code2,
-  TrendingUp,
-  Network,
-  Globe2,
-  BarChart3,
-  Workflow,
-  Menu,
-  X,
-  User,
   MapPin,
-  Globe,
-  FileText,
-  Download,
-  Calendar,
-  Clock,
-  Radio
+  Menu,
+  Moon,
+  ShieldCheck,
+  Sun,
+  User,
+  X
 } from 'lucide-react';
-import { motion, useScroll, useTransform, useSpring, useMotionTemplate, useMotionValue, useAnimationFrame } from 'framer-motion';
+import { motion, useMotionTemplate, useMotionValue, useScroll, useTransform } from 'framer-motion';
 import ReactLenis from 'lenis/react';
 
-// --- Expert Modernization Components ---
-
 const DecryptText = ({ text, className }) => {
-  const [displayText, setDisplayText] = useState("");
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
+  const [displayText, setDisplayText] = useState('');
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+';
 
   useEffect(() => {
     let iteration = 0;
     const interval = setInterval(() => {
-      setDisplayText(text.split("").map((letter, index) => {
-        if (index < iteration) return text[index];
-        return chars[Math.floor(Math.random() * chars.length)];
-      }).join(""));
+      setDisplayText(
+        text
+          .split('')
+          .map((letter, index) => {
+            if (index < iteration) return text[index];
+            return chars[Math.floor(Math.random() * chars.length)];
+          })
+          .join('')
+      );
 
       if (iteration >= text.length) clearInterval(interval);
       iteration += 1 / 3;
     }, 30);
+
     return () => clearInterval(interval);
   }, [text]);
 
@@ -58,8 +56,8 @@ const DecryptText = ({ text, className }) => {
 const TiltCard = ({ children, className }) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  const rotateX = useTransform(y, [-100, 100], [5, -5]);
-  const rotateY = useTransform(x, [-100, 100], [-5, 5]);
+  const rotateX = useTransform(y, [-100, 100], [4, -4]);
+  const rotateY = useTransform(x, [-100, 100], [-4, 4]);
 
   function handleMouseMove(event) {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -86,7 +84,7 @@ const TiltCard = ({ children, className }) => {
   );
 };
 
-const SystemStatus = () => {
+const SystemStatus = ({ statusText, locationText, timeLocale }) => {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -95,42 +93,40 @@ const SystemStatus = () => {
   }, []);
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 hidden md:flex items-center gap-4 px-4 py-2 bg-slate-900/80 backdrop-blur-md border border-white/10 rounded-full text-[10px] font-mono text-slate-300 shadow-xl">
+    <div className="fixed top-24 right-6 z-50 hidden md:flex items-center gap-4 px-4 py-2 surface border rounded-full text-[10px] mono text-muted shadow-soft">
       <div className="flex items-center gap-2">
-        <Globe size={12} className="text-blue-500" />
-        <span>AUGSBURG, DE</span>
+        <Globe size={12} className="text-accent" />
+        <span>{locationText}</span>
       </div>
-      <div className="w-px h-3 bg-white/10" />
+      <div className="w-px h-3 border-l border-[var(--color-border)]" />
       <div className="flex items-center gap-2">
-        <Clock size={12} className="text-emerald-500" />
-        <span>{time.toLocaleTimeString('de-DE')}</span>
+        <Clock size={12} className="text-emerald-600" />
+        <span className="text-emerald-600">{time.toLocaleTimeString(timeLocale)}</span>
       </div>
-      <div className="w-px h-3 bg-white/10" />
+      <div className="w-px h-3 border-l border-[var(--color-border)]" />
       <div className="flex items-center gap-2">
         <span className="relative flex h-2 w-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+          <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-40" />
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
         </span>
-        <span className="text-green-400 font-bold">SYSTEM ONLINE</span>
+        <span className="text-emerald-600 font-semibold">{statusText}</span>
       </div>
     </div>
   );
 };
 
-// --- Existing Components (Refined) ---
-
 const RevealOnScroll = ({ children, delay = 0 }) => {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["0 1", "1.2 1"]
+    offset: ['0 1', '1.2 1']
   });
 
   const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
-  const y = useTransform(scrollYProgress, [0, 1], [50, 0]);
+  const y = useTransform(scrollYProgress, [0, 1], [40, 0]);
 
   return (
-    <motion.div ref={ref} style={{ opacity, y }} transition={{ duration: 0.8, delay }}>
+    <motion.div ref={ref} style={{ opacity, y }} transition={{ duration: 0.7, delay }}>
       {children}
     </motion.div>
   );
@@ -145,7 +141,7 @@ const Magnetic = ({ children }) => {
     const { height, width, left, top } = ref.current.getBoundingClientRect();
     const middleX = clientX - (left + width / 2);
     const middleY = clientY - (top + height / 2);
-    setPosition({ x: middleX * 0.1, y: middleY * 0.1 });
+    setPosition({ x: middleX * 0.08, y: middleY * 0.08 });
   };
 
   const reset = () => setPosition({ x: 0, y: 0 });
@@ -158,103 +154,162 @@ const Magnetic = ({ children }) => {
       onMouseMove={handleMouse}
       onMouseLeave={reset}
       animate={{ x, y }}
-      transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
+      transition={{ type: 'spring', stiffness: 140, damping: 18, mass: 0.1 }}
     >
       {children}
     </motion.div>
   );
 };
 
-const BackgroundParticles = () => {
-  // Knowledge Particles - Mixed Info Systems (Business + Tech + Global)
-  const particles = [
-    // Tech / Dev
-    { text: "SQL", color: "text-orange-400" },
-    { text: "<div>", color: "text-blue-400" },
-    { text: "API", color: "text-yellow-200" },
-    { text: "git", color: "text-orange-500" },
-    { text: "JSON", color: "text-yellow-400" },
+const ThemeToggle = ({ theme, onToggle, labels }) => (
+  <button
+    type="button"
+    onClick={onToggle}
+    aria-label="Toggle theme"
+    className="flex items-center gap-2 rounded-full border px-3 py-2 text-xs font-semibold tracking-wide surface hover:shadow-soft transition"
+  >
+    {theme === 'light' ? <Moon size={14} /> : <Sun size={14} />}
+    <span>{theme === 'light' ? labels.dark : labels.light}</span>
+  </button>
+);
 
-    // Business / Systems
-    { text: "ERP", color: "text-emerald-400" },
-    { text: "SAP", color: "text-blue-300" },
-    { text: "BPMN", color: "text-purple-400" },
-    { text: "CRM", color: "text-pink-400" },
-    { text: "ROI", color: "text-green-400" },
-    { text: "KPI", color: "text-cyan-400" },
-    { text: "Agile", color: "text-indigo-400" },
-    { text: "Scrum", color: "text-blue-200" },
+const LanguageToggle = ({ language, onToggle, label }) => (
+  <button
+    type="button"
+    onClick={onToggle}
+    aria-label="Toggle language"
+    className="flex items-center gap-2 rounded-full border px-3 py-2 text-xs font-semibold tracking-wide surface hover:shadow-soft transition"
+  >
+    <span className="mono text-[10px] tracking-[0.2em]">{label}</span>
+    <span className="text-base leading-none" aria-hidden>
+      {language === 'en' ? '🇬🇧' : '🇩🇪'}
+    </span>
+    <span className="mono text-[10px] tracking-[0.2em]">EN/DE</span>
+    <span className="sr-only">{language.toUpperCase()}</span>
+  </button>
+);
 
-    // Icons (Visual Metaphors)
-    { icon: Globe, color: "text-emerald-500", size: 24 }, // International
-    { icon: Database, color: "text-blue-500", size: 24 }, // Systems
-    { icon: Network, color: "text-purple-500", size: 24 }, // Connectivity
-    { icon: TrendingUp, color: "text-green-500", size: 24 }, // Growth/Business
-    { icon: BarChart3, color: "text-yellow-500", size: 24 }, // Analytics
-    { icon: Workflow, color: "text-cyan-500", size: 24 }, // Process
-    { icon: Globe2, color: "text-blue-400", size: 24 }, // Global
-  ];
+const SkillBadge = ({ text, variant = 'default' }) => (
+  <span className={`badge badge-${variant}`}>{text}</span>
+);
+
+const QAReportModal = ({ isOpen, onClose, report, labels }) => {
+  const closeButtonRef = useRef(null);
+  const previousFocusRef = useRef(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    previousFocusRef.current = document.activeElement;
+    closeButtonRef.current?.focus();
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      previousFocusRef.current?.focus?.();
+    };
+  }, [isOpen, onClose]);
+
+  if (!isOpen || !report) return null;
 
   return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden">
-      {particles.map((item, i) => (
-        <motion.div
-          key={i}
-          initial={{ opacity: 0, scale: 0.5, x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight }}
-          animate={{
-            opacity: [0, 0.6, 0], // Increased opacity to 0.6 for better visibility
-            y: [0, -80, 0],
-            rotate: item.icon ? [0, 15, -15, 0] : 0 // Slight rotation for icons
-          }}
-          transition={{
-            duration: 15 + Math.random() * 10,
-            repeat: Infinity,
-            delay: Math.random() * 5
-          }}
-          className={`absolute ${item.color} font-mono font-bold select-none z-0`}
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-            fontSize: item.icon ? undefined : (Math.random() > 0.5 ? '1.25rem' : '0.875rem') // Randomize text size
-          }}
-        >
-          {item.icon ? <item.icon size={item.size} /> : item.text}
-        </motion.div>
-      ))}
+    <div className="fixed inset-0 z-[60] flex items-center justify-center px-4">
+      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
+      <div
+        className="relative w-full max-w-3xl surface border rounded-3xl p-6 md:p-8 shadow-strong max-h-[85vh] overflow-y-auto"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="qa-report-title"
+        aria-describedby="qa-report-subtitle"
+      >
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-xs mono text-muted">{labels.reportLabel}</p>
+            <h3 id="qa-report-title" className="text-2xl font-semibold mt-2">{report.title}</h3>
+            <p id="qa-report-subtitle" className="text-sm text-muted mt-2">{report.subtitle}</p>
+          </div>
+          <button
+            ref={closeButtonRef}
+            className="icon-button"
+            onClick={onClose}
+            aria-label="Close report"
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-4 mt-6">
+          {report.summary.map((item) => (
+            <div key={item.label} className="surface-soft rounded-2xl p-4">
+              <p className="text-xs mono text-muted">{item.label}</p>
+              <p className="text-lg font-semibold mt-2">{item.value}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-6">
+          <p className="text-xs mono text-muted">{labels.findings}</p>
+          <div className="mt-3 grid gap-3">
+            {report.findings.map((finding) => (
+              <div key={finding.title} className="surface-soft rounded-2xl p-4">
+                <div className="flex items-center justify-between">
+                  <p className="font-semibold">{finding.title}</p>
+                  <span className={`badge ${finding.severity === 'High' ? 'badge-accent' : 'badge-muted'}`}>
+                    {finding.severity}
+                  </span>
+                </div>
+                <p className="text-sm text-muted mt-2">{finding.description}</p>
+                <p className="text-xs mono text-muted mt-3">{labels.status}: {finding.status}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
-const SkillBadge = ({ text, category }) => (
-  <span className={`
-    px-3 py-1.5 rounded-lg text-xs font-semibold backdrop-blur-sm border transition-all duration-300 hover:scale-105 cursor-default
-    ${category === 'tech' ? 'bg-blue-500/10 border-blue-500/20 text-blue-300 hover:bg-blue-500/20 hover:border-blue-500/40' :
-      category === 'design' ? 'bg-purple-500/10 border-purple-500/20 text-purple-300 hover:bg-purple-500/20 hover:border-purple-500/40' :
-        category === 'test' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-300 hover:bg-emerald-500/20 hover:border-emerald-500/40' :
-          'bg-slate-800/50 border-slate-700 text-slate-300'}
-  `}>
-    {text}
-  </span>
-);
-
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [theme, setTheme] = useState(() => {
+    if (typeof window === 'undefined') return 'light';
+    return localStorage.getItem('theme') || 'light';
+  });
+  const [language, setLanguage] = useState(() => {
+    if (typeof window === 'undefined') return 'en';
+    return localStorage.getItem('language') || 'en';
+  });
+  const [activeReport, setActiveReport] = useState(null);
+  const [isDockCompact, setIsDockCompact] = useState(false);
+  const dockTimerRef = useRef(null);
 
-  // Spotlight Logic
-  let mouseX = useMotionValue(0);
-  let mouseY = useMotionValue(0);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
 
   function handleMouseMove({ currentTarget, clientX, clientY }) {
-    let { left, top } = currentTarget.getBoundingClientRect();
+    const { left, top } = currentTarget.getBoundingClientRect();
     mouseX.set(clientX - left);
     mouseY.set(clientY - top);
   }
 
-  const noiseBg = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E")`;
+  const noiseBg = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E")`;
 
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
 
-
+  useEffect(() => {
+    localStorage.setItem('language', language);
+    document.documentElement.lang = language;
+  }, [language]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 30);
@@ -262,484 +317,1203 @@ const App = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    const handleActivity = () => {
+      setIsDockCompact(true);
+      if (dockTimerRef.current) {
+        window.clearTimeout(dockTimerRef.current);
+      }
+      dockTimerRef.current = window.setTimeout(() => {
+        setIsDockCompact(false);
+      }, 1600);
+    };
+
+    window.addEventListener('mousemove', handleActivity);
+    window.addEventListener('scroll', handleActivity, { passive: true });
+    window.addEventListener('keydown', handleActivity);
+    window.addEventListener('touchstart', handleActivity, { passive: true });
+
+    return () => {
+      window.removeEventListener('mousemove', handleActivity);
+      window.removeEventListener('scroll', handleActivity);
+      window.removeEventListener('keydown', handleActivity);
+      window.removeEventListener('touchstart', handleActivity);
+      if (dockTimerRef.current) {
+        window.clearTimeout(dockTimerRef.current);
+      }
+    };
+  }, []);
+
   const socialLinks = {
-    github: "https://github.com/MarkDanielsMCraft",
-    linkedin: "https://www.linkedin.com/in/markdanielsm",
-    email: "markdanielsmbaziira@gmail.com",
-    cvUrl: "/MARK_DANIELS_MBAZIIRA_CV.pdf"
+    github: 'https://github.com/MarkDanielsMCraft',
+    linkedin: 'https://www.linkedin.com/in/markdanielsm',
+    email: 'redselig-63-besorgung@icloud.com',
+    cvUrl: 'mailto:redselig-63-besorgung@icloud.com?subject=CV%20Request'
+  };
+  const content = {
+    en: {
+      nav: [
+        { label: 'About', href: '#about' },
+        { label: 'Profiles', href: '#profiles' },
+        { label: 'Services', href: '#services' },
+        { label: 'Case Studies', href: '#case-studies' },
+        { label: 'Process', href: '#process' },
+        { label: 'Experience', href: '#experience' },
+        { label: 'Education', href: '#education' }
+      ],
+      systemStatus: {
+        location: 'AUGSBURG, DE',
+        status: 'AVAILABLE',
+        timeLocale: 'en-GB'
+      },
+      theme: { dark: 'Dark', light: 'Light' },
+      language: { label: 'LANG' },
+      hero: {
+        badge: 'Seeking working student roles',
+        title: 'Quality-first systems and data integrity for products that need to',
+        titleAccent: 'ship clean',
+        subtitle:
+          'International Information Systems student at TH Augsburg. I focus on data validation, backend logic, and manual testing, using projects to apply coursework and improve real systems.',
+        impact:
+          'Recent focus: data validation for multi-cohort tracking, React 19 QA upgrades, and mobile-first UX verification.',
+        proof: ['Manual QA', 'Data Validation', 'Backend Logic', 'React 19', 'SQL', 'Git / GitHub'],
+        ctaPrimary: 'View case studies',
+        ctaSecondary: 'CV',
+        location: 'Augsburg, DE',
+        languages: 'EN / DE / Luganda'
+      },
+      profile: {
+        label: 'SYSTEM PROFILE',
+        status: 'Available',
+        focusLabel: 'Core focus',
+        focusValue: 'Data QA + backend logic',
+        highlights: [
+          { label: 'Primary', value: 'Manual QA' },
+          { label: 'Secondary', value: 'Data Validation' },
+          { label: 'Currently', value: 'React 19' },
+          { label: 'Based in', value: 'Augsburg' }
+        ],
+        tagline: 'Build. Verify. Improve.'
+      },
+      about: {
+        label: 'ABOUT',
+        title: 'Student profile',
+        body:
+          'I study International Information Systems to connect business needs with reliable technical delivery. I enjoy working with data, backend logic, and QA workflows, and I use small projects to turn coursework into practical systems.',
+        skills: [
+          { text: 'Java (OOP)' },
+          { text: 'SQL / Databases' },
+          { text: 'Backend Logic' },
+          { text: 'Manual QA', variant: 'accent' },
+          { text: 'Data Validation', variant: 'accent' },
+          { text: 'UI/UX Verification' },
+          { text: 'Git / GitHub' },
+          { text: 'React (Learning)' }
+        ]
+      },
+      cv: {
+        label: 'CV',
+        title: 'Request my CV',
+        subtitle: 'Available on request to protect personal details.',
+        view: 'Request CV'
+      },
+      profiles: {
+        label: 'PROFILES',
+        title: 'Social footprint',
+        subtitle: 'Where I share work, write updates, and connect with teams.',
+        items: [
+          {
+            title: 'LinkedIn',
+            subtitle: 'Work history, education, and QA focus.',
+            link: 'https://www.linkedin.com/in/markdanielsm',
+            icon: <Linkedin size={18} />,
+            meta: ['Open to roles', 'International Systems', 'Data + QA'],
+            stats: [
+              { label: 'Focus', value: 'QA + Data' },
+              { label: 'Locale', value: 'Augsburg' }
+            ]
+          },
+          {
+            title: 'GitHub',
+            subtitle: 'Projects, experiments, and learning logs.',
+            link: 'https://github.com/MarkDanielsMCraft',
+            icon: <Github size={18} />,
+            meta: ['React 19', 'QA notes', 'Mini tools'],
+            stats: [
+              { label: 'Primary', value: 'Web QA' },
+              { label: 'Stack', value: 'React / Vite' }
+            ]
+          },
+          {
+            title: 'Email',
+            subtitle: 'Direct contact for collaborations and roles.',
+            link: 'mailto:redselig-63-besorgung@icloud.com',
+            icon: <Mail size={18} />,
+            meta: ['Fast reply', 'Open for QA', 'Working student'],
+            stats: [
+              { label: 'Availability', value: 'Open' },
+              { label: 'Type', value: 'Working student' }
+            ]
+          }
+        ]
+      },
+      services: {
+        label: 'SERVICES',
+        title: 'What I deliver',
+        tagline: 'systems-first QA',
+        items: [
+          {
+            title: 'QA & Release Confidence',
+            description:
+              'Manual testing for UI, logic, and edge cases. Clear bug reports with reproduction steps and impact notes.',
+            icon: <ShieldCheck size={18} />
+          },
+          {
+            title: 'Data Quality Assurance',
+            description:
+              'Validation of spreadsheets, dashboards, and operational data. Cross-checks for consistency and integrity.',
+            icon: <Database size={18} />
+          },
+          {
+            title: 'UX Verification',
+            description:
+              'Usability checks across devices, privacy banners, and friction analysis for conversion flows.',
+            icon: <Layout size={18} />
+          }
+        ]
+      },
+      caseStudies: {
+        label: 'CASE STUDIES',
+        title: 'Proof of work',
+        challenge: 'Challenge',
+        actions: 'Actions',
+        outcomes: 'Outcomes',
+        report: 'Open QA report',
+        visit: 'Visit project',
+        items: [
+          {
+            title: 'StartGermany Survival Kit',
+            focus: 'QA + React 19 upgrade validation',
+            summary:
+              'Tested a responsive guide platform during a React 19 upgrade, focusing on navigation, counters, and tag filters.',
+            challenge: 'Prevent regressions during a major framework upgrade while keeping guide data reliable.',
+            actions: [
+              'Verified dynamic counters and tags with manual edge-case runs.',
+              'Configured ESLint to catch syntax issues before deployment.',
+              'Validated responsive layouts on desktop and mobile views.'
+            ],
+            outcomes: [
+              'Stable navigation and data accuracy after upgrade.',
+              'Cleaner QA workflow before release.',
+              'Clearer UI behavior on small screens.'
+            ],
+            signals: ['Cross-browser checks', 'React 19 upgrade path', 'Data accuracy checks'],
+            tech: ['React 19', 'ESLint', 'Vite', 'Manual QA'],
+            link: 'https://startgermany.vercel.app/',
+            image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=1200',
+            report: {
+              title: 'StartGermany QA Snapshot',
+              subtitle: 'Manual regression run focused on navigation, counters, and filters.',
+              summary: [
+                { label: 'Coverage', value: 'Desktop + Mobile' },
+                { label: 'Browsers', value: 'Chrome + Safari' },
+                { label: 'Status', value: 'Release-ready' }
+              ],
+              findings: [
+                {
+                  title: 'Counter sync on rapid filter changes',
+                  severity: 'High',
+                  description: 'Counters can lag by one state when filters are toggled quickly.',
+                  status: 'Resolved'
+                },
+                {
+                  title: 'Tag filter focus state on mobile',
+                  severity: 'Medium',
+                  description: 'Focus outline missing after scroll on small screens.',
+                  status: 'Resolved'
+                }
+              ]
+            }
+          },
+          {
+            title: 'Lyia Braids Booking Flow',
+            focus: 'UX + compliance testing',
+            summary: 'Designed and tested a mobile-first booking experience with a direct WhatsApp handoff.',
+            challenge: 'Reduce booking friction while keeping GDPR compliance and cross-browser consistency.',
+            actions: [
+              'Tested layout behavior across Chrome, Safari, and mobile views.',
+              'Implemented cookie consent and verified interaction states.',
+              'Optimized CTA placement for fast contact.'
+            ],
+            outcomes: [
+              'Consistent experience across browsers.',
+              'Clear consent flow without blocking the booking path.',
+              'Streamlined contact journey.'
+            ],
+            signals: ['Consent compliance checks', 'Mobile CTA placement', 'UX friction audit'],
+            tech: ['Tailwind CSS', 'UX QA', 'GDPR'],
+            link: 'https://lyia-braids.vercel.app/',
+            image: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&q=80&w=1200',
+            report: {
+              title: 'Lyia Braids QA Snapshot',
+              subtitle: 'Mobile-first UX validation with consent coverage.',
+              summary: [
+                { label: 'Coverage', value: 'Mobile-first' },
+                { label: 'Browsers', value: 'Chrome + Safari' },
+                { label: 'Status', value: 'Live' }
+              ],
+              findings: [
+                {
+                  title: 'Cookie banner overlap on smaller screens',
+                  severity: 'Medium',
+                  description: 'Consent banner overlaps CTA on narrow devices.',
+                  status: 'Resolved'
+                },
+                {
+                  title: 'WhatsApp CTA contrast',
+                  severity: 'Low',
+                  description: 'Contrast adjusted for better readability in bright conditions.',
+                  status: 'Resolved'
+                }
+              ]
+            }
+          }
+        ]
+      },
+      reportModal: {
+        reportLabel: 'QA REPORT',
+        findings: 'Findings',
+        status: 'Status'
+      },
+      process: {
+        label: 'PROCESS',
+        title: 'How I work',
+        steps: [
+          {
+            title: 'Scope & Hypotheses',
+            description: 'Clarify what success means and list risk-heavy areas first.'
+          },
+          {
+            title: 'Test Design',
+            description: 'Create scenarios, edge cases, and device/browser coverage.'
+          },
+          {
+            title: 'Execution & Reporting',
+            description: 'Run checks, capture evidence, and write clear reproduction steps.'
+          },
+          {
+            title: 'Fix Verification',
+            description: 'Retest, close gaps, and update documentation.'
+          }
+        ]
+      },
+      tooling: {
+        label: 'TOOLING',
+        title: 'Tools I use weekly',
+        items: ['VS Code', 'Microsoft Excel', 'Google Sheets', 'MS Office', 'GitHub', 'Vite', 'ChatGPT/Copilot']
+      },
+      experience: {
+        label: 'EXPERIENCE',
+        title: 'Student work',
+        items: [
+          {
+            company: 'Malengo gGmbH',
+            role: 'Working Student (Program Data Support)',
+            period: '12/2025 - Present',
+            tasks: [
+              'Validate tracking sheets for Kenya TVET cohorts 2024B, 2025A, 2025B with daily checks.',
+              'Cross-verify attendance, vaccination records, and status reports for discrepancies.',
+              'Structure operational data files for accurate reporting and handover clarity.'
+            ],
+            icon: <Database className="text-accent" />
+          },
+          {
+            company: 'Study in Germany (DAAD)',
+            role: 'Volunteer Blogger',
+            period: '03/2025 - Present',
+            tasks: ['Write and verify articles for international students, focusing on clarity and accuracy.'],
+            icon: <Globe className="text-accent" />
+          },
+          {
+            company: 'Amazon',
+            role: 'Sortation Associate',
+            period: '06/2025 - 11/2025',
+            tasks: [
+              'Executed digital workflows following strict safety and quality procedures.',
+              'Maintained high accuracy in a fast-paced, target-driven environment.'
+            ],
+            icon: <ShieldCheck className="text-accent" />
+          }
+        ]
+      },
+      education: {
+        label: 'EDUCATION',
+        title: 'Education',
+        items: [
+          {
+            degree: 'B.Sc. International Information Systems',
+            school: 'Technische Hochschule Augsburg',
+            period: '10/2025 - Present',
+            focus: 'Focus: IT systems, backend logic, data processes.'
+          }
+        ]
+      },
+      footer: {
+        label: "LET'S TALK",
+        title: 'Ready to validate your next release',
+        subtitle: 'Working student roles in QA, data validation, backend, or web QA.',
+        ctaPrimary: 'Get in touch',
+        ctaSecondary: 'Buy me some coffee'
+      }
+    },
+    de: {
+      nav: [
+        { label: 'Ueber mich', href: '#about' },
+        { label: 'Profile', href: '#profiles' },
+        { label: 'Leistungen', href: '#services' },
+        { label: 'Fallstudien', href: '#case-studies' },
+        { label: 'Prozess', href: '#process' },
+        { label: 'Erfahrung', href: '#experience' },
+        { label: 'Ausbildung', href: '#education' }
+      ],
+      systemStatus: {
+        location: 'AUGSBURG, DE',
+        status: 'VERFUEGBAR',
+        timeLocale: 'de-DE'
+      },
+      theme: { dark: 'Dunkel', light: 'Hell' },
+      language: { label: 'SPRACHE' },
+      hero: {
+        badge: 'Suche Werkstudentenstellen',
+        title: 'Qualitaet, Datenintegritaet und Systemdenken fuer Produkte, die',
+        titleAccent: 'sauber liefern',
+        subtitle:
+          'Ich studiere Internationale Informationssysteme an der TH Augsburg. Fokus auf Datenvalidierung, Backend-Logik und manuelles Testing; eigene Projekte nutze ich, um Studieninhalte praktisch anzuwenden und Systeme zu verbessern.',
+        impact:
+          'Aktueller Fokus: Datenvalidierung fuer mehrere Kohorten, React-19-QA-Upgrades und mobile UX-Verifikation.',
+        proof: ['Manuelles QA', 'Datenvalidierung', 'Backend-Logik', 'React 19', 'SQL', 'Git / GitHub'],
+        ctaPrimary: 'Fallstudien ansehen',
+        ctaSecondary: 'Lebenslauf',
+        location: 'Augsburg, DE',
+        languages: 'EN / DE / Luganda'
+      },
+      profile: {
+        label: 'SYSTEMPROFIL',
+        status: 'Verfuegbar',
+        focusLabel: 'Schwerpunkt',
+        focusValue: 'Data QA + Backend-Logik',
+        highlights: [
+          { label: 'Primaer', value: 'Manuelles QA' },
+          { label: 'Sekundaer', value: 'Datenvalidierung' },
+          { label: 'Aktuell', value: 'React 19' },
+          { label: 'Standort', value: 'Augsburg' }
+        ],
+        tagline: 'Bauen. Pruefen. Verbessern.'
+      },
+      about: {
+        label: 'UEBER MICH',
+        title: 'Studentenprofil',
+        body:
+          'Ich studiere Internationale Informationssysteme, um Geschaeftsziele mit zuverlaessiger technischer Umsetzung zu verbinden. Ich arbeite gerne mit Daten, Backend-Logik und QA-Prozessen und nutze eigene Projekte, um Studieninhalte praktisch anzuwenden.',
+        skills: [
+          { text: 'Java (OOP)' },
+          { text: 'SQL / Datenbanken' },
+          { text: 'Backend-Logik' },
+          { text: 'Manuelles Testing', variant: 'accent' },
+          { text: 'Datenvalidierung', variant: 'accent' },
+          { text: 'UI/UX Verifikation' },
+          { text: 'Git / GitHub' },
+          { text: 'React (im Aufbau)' }
+        ]
+      },
+      cv: {
+        label: 'LEBENSLAUF',
+        title: 'Lebenslauf anfragen',
+        subtitle: 'Auf Anfrage verfuegbar, um persoenliche Daten zu schuetzen.',
+        view: 'Lebenslauf anfragen'
+      },
+      profiles: {
+        label: 'PROFILE',
+        title: 'Soziale Praesenz',
+        subtitle: 'Wo ich Projekte teile, Updates schreibe und mich vernetze.',
+        items: [
+          {
+            title: 'LinkedIn',
+            subtitle: 'Berufserfahrung, Ausbildung und QA-Fokus.',
+            link: 'https://www.linkedin.com/in/markdanielsm',
+            icon: <Linkedin size={18} />,
+            meta: ['Offen fuer Rollen', 'Informationssysteme', 'Data + QA'],
+            stats: [
+              { label: 'Fokus', value: 'QA + Daten' },
+              { label: 'Standort', value: 'Augsburg' }
+            ]
+          },
+          {
+            title: 'GitHub',
+            subtitle: 'Projekte, Experimente und Lernnotizen.',
+            link: 'https://github.com/MarkDanielsMCraft',
+            icon: <Github size={18} />,
+            meta: ['React 19', 'QA-Notizen', 'Mini Tools'],
+            stats: [
+              { label: 'Schwerpunkt', value: 'Web QA' },
+              { label: 'Stack', value: 'React / Vite' }
+            ]
+          },
+          {
+            title: 'Email',
+            subtitle: 'Direkter Kontakt fuer Zusammenarbeit und Rollen.',
+            link: 'mailto:redselig-63-besorgung@icloud.com',
+            icon: <Mail size={18} />,
+            meta: ['Schnelle Antwort', 'QA offen', 'Werkstudent'],
+            stats: [
+              { label: 'Verfuegbar', value: 'Offen' },
+              { label: 'Typ', value: 'Werkstudent' }
+            ]
+          }
+        ]
+      },
+      services: {
+        label: 'LEISTUNGEN',
+        title: 'Was ich liefere',
+        tagline: 'Systemorientiertes QA',
+        items: [
+          {
+            title: 'QA & Release-Sicherheit',
+            description:
+              'Manuelles Testing fuer UI, Logik und Edge Cases. Saubere Bug-Reports mit Repro-Schritten und Impact.',
+            icon: <ShieldCheck size={18} />
+          },
+          {
+            title: 'Datenqualitaet',
+            description:
+              'Validierung von Tabellen, Dashboards und operativen Daten. Abgleich fuer Konsistenz und Integritaet.',
+            icon: <Database size={18} />
+          },
+          {
+            title: 'UX-Verifikation',
+            description:
+              'Usability-Checks ueber Devices, Privacy-Banner und Friktionsanalyse fuer Conversion-Flows.',
+            icon: <Layout size={18} />
+          }
+        ]
+      },
+      caseStudies: {
+        label: 'FALLSTUDIEN',
+        title: 'Arbeitsproben',
+        challenge: 'Herausforderung',
+        actions: 'Aktionen',
+        outcomes: 'Ergebnisse',
+        report: 'QA-Report oeffnen',
+        visit: 'Projekt ansehen',
+        items: [
+          {
+            title: 'StartGermany Survival Kit',
+            focus: 'QA + React 19 Upgrade-Validierung',
+            summary:
+              'Responsive Guide-Plattform waehrend eines React-19-Upgrades getestet, Fokus auf Navigation, Counter und Tags.',
+            challenge: 'Regressionen bei einem grossen Framework-Upgrade vermeiden und Daten verlaesslich halten.',
+            actions: [
+              'Dynamische Counter und Tags mit Edge-Case-Tests geprueft.',
+              'ESLint konfiguriert, um Syntaxfehler vor dem Deployment zu finden.',
+              'Responsive Layouts auf Desktop und Mobile validiert.'
+            ],
+            outcomes: [
+              'Stabile Navigation und Datenpraezision nach dem Upgrade.',
+              'Sauberer QA-Workflow vor dem Release.',
+              'Klareres UI-Verhalten auf kleinen Screens.'
+            ],
+            signals: ['Cross-Browser Checks', 'React-19-Upgrade', 'Datenchecks'],
+            tech: ['React 19', 'ESLint', 'Vite', 'Manuelles QA'],
+            link: 'https://startgermany.vercel.app/',
+            image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=1200',
+            report: {
+              title: 'StartGermany QA Snapshot',
+              subtitle: 'Manueller Regression-Run mit Fokus auf Navigation, Counter und Filter.',
+              summary: [
+                { label: 'Abdeckung', value: 'Desktop + Mobile' },
+                { label: 'Browser', value: 'Chrome + Safari' },
+                { label: 'Status', value: 'Release-ready' }
+              ],
+              findings: [
+                {
+                  title: 'Counter Sync bei schnellen Filterwechseln',
+                  severity: 'High',
+                  description: 'Zaehler haengt bei schnellen Filterwechseln um einen Zustand hinterher.',
+                  status: 'Behoben'
+                },
+                {
+                  title: 'Tag-Fokuszustand auf Mobile',
+                  severity: 'Medium',
+                  description: 'Focus-Outline fehlt nach Scroll auf kleinen Screens.',
+                  status: 'Behoben'
+                }
+              ]
+            }
+          },
+          {
+            title: 'Lyia Braids Booking Flow',
+            focus: 'UX + Compliance-Testing',
+            summary: 'Mobile-first Booking-Flow mit direktem WhatsApp-Handoff gestaltet und getestet.',
+            challenge: 'Reibung im Buchungsprozess reduzieren und GDPR-Compliance sichern.',
+            actions: [
+              'Layout-Verhalten in Chrome, Safari und Mobile getestet.',
+              'Cookie-Consent integriert und Interaktionszustand geprueft.',
+              'CTA-Platzierung fuer schnelle Kontaktaufnahme optimiert.'
+            ],
+            outcomes: [
+              'Konsistente Experience ueber Browser hinweg.',
+              'Klare Consent-Logik ohne Blockade der Buchung.',
+              'Vereinfachter Kontaktfluss.'
+            ],
+            signals: ['Consent-Checks', 'Mobile CTA', 'UX Reibungsanalyse'],
+            tech: ['Tailwind CSS', 'UX QA', 'GDPR'],
+            link: 'https://lyia-braids.vercel.app/',
+            image: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&q=80&w=1200',
+            report: {
+              title: 'Lyia Braids QA Snapshot',
+              subtitle: 'Mobile-first UX-Validierung mit Consent-Abdeckung.',
+              summary: [
+                { label: 'Abdeckung', value: 'Mobile-first' },
+                { label: 'Browser', value: 'Chrome + Safari' },
+                { label: 'Status', value: 'Live' }
+              ],
+              findings: [
+                {
+                  title: 'Cookie-Banner ueberlappt CTA',
+                  severity: 'Medium',
+                  description: 'Banner ueberlappt CTA auf schmalen Displays.',
+                  status: 'Behoben'
+                },
+                {
+                  title: 'WhatsApp CTA Kontrast',
+                  severity: 'Low',
+                  description: 'Kontrast fuer bessere Lesbarkeit angepasst.',
+                  status: 'Behoben'
+                }
+              ]
+            }
+          }
+        ]
+      },
+      reportModal: {
+        reportLabel: 'QA REPORT',
+        findings: 'Findings',
+        status: 'Status'
+      },
+      process: {
+        label: 'PROZESS',
+        title: 'So arbeite ich',
+        steps: [
+          {
+            title: 'Scope & Hypothesen',
+            description: 'Ziele klaeren und risikoreiche Bereiche zuerst priorisieren.'
+          },
+          {
+            title: 'Testdesign',
+            description: 'Szenarien, Edge Cases sowie Device/Browser-Abdeckung festlegen.'
+          },
+          {
+            title: 'Ausfuehrung & Reporting',
+            description: 'Tests ausfuehren, Belege sichern und klare Repro-Schritte schreiben.'
+          },
+          {
+            title: 'Fix-Verifikation',
+            description: 'Nachtesten, Luecken schliessen und Doku aktualisieren.'
+          }
+        ]
+      },
+      tooling: {
+        label: 'TOOLS',
+        title: 'Tools, die ich woechentlich nutze',
+        items: ['VS Code', 'Microsoft Excel', 'Google Sheets', 'MS Office', 'GitHub', 'Vite', 'ChatGPT/Copilot']
+      },
+      experience: {
+        label: 'ERFAHRUNG',
+        title: 'Praxis & Werkstudentenjobs',
+        items: [
+          {
+            company: 'Malengo gGmbH',
+            role: 'Werkstudent (Programmdaten-Unterstuetzung)',
+            period: '12/2025 - Heute',
+            tasks: [
+              'Tracking-Sheets fuer Kenya-TVET-Kohorten 2024B, 2025A, 2025B taeglich validiert.',
+              'Abgleich von Anwesenheit, Impfstatus und Statusberichten zur Fehlerfindung.',
+              'Operative Datenfiles strukturiert fuer Reporting und saubere Handover.'
+            ],
+            icon: <Database className="text-accent" />
+          },
+          {
+            company: 'Study in Germany (DAAD)',
+            role: 'Freiwilliger Blogger',
+            period: '03/2025 - Heute',
+            tasks: ['Artikel fuer internationale Studierende verfassen und auf Klarheit pruefen.'],
+            icon: <Globe className="text-accent" />
+          },
+          {
+            company: 'Amazon',
+            role: 'Sortation Associate',
+            period: '06/2025 - 11/2025',
+            tasks: [
+              'Digitale Workflows nach strikten Sicherheits- und Qualitaetsprozessen ausgefuehrt.',
+              'Hohe Genauigkeit in einem schnellen, zielgetriebenen Umfeld gehalten.'
+            ],
+            icon: <ShieldCheck className="text-accent" />
+          }
+        ]
+      },
+      education: {
+        label: 'AUSBILDUNG',
+        title: 'Studium',
+        items: [
+          {
+            degree: 'B.Sc. Internationale Informationssysteme',
+            school: 'Technische Hochschule Augsburg',
+            period: '10/2025 - Heute',
+            focus: 'Schwerpunkt: IT-Systeme, Backend-Logik, Datenprozesse.'
+          }
+        ]
+      },
+      footer: {
+        label: 'KONTAKT',
+        title: 'Bereit, deinen naechsten Release zu validieren',
+        subtitle: 'Werkstudentenstellen in QA, Datenvalidierung, Backend oder Web QA.',
+        ctaPrimary: 'Kontakt aufnehmen',
+        ctaSecondary: 'Kauf mir einen Kaffee'
+      }
+    }
   };
 
-  const projects = [
-    {
-      title: "StartGermany",
-      subtitle: "Survival Kit",
-      tag: "QA & Development",
-      description: "• Modern Web Testing: Built and tested a responsive guide platform, manually verified stability during a major upgrade to React 19.\n• QA Workflow Automation: Configured ESLint to automatically detect syntax errors and improve code quality before deployment.\n• UI & Logic Verification: Manually tested dynamic components, such as guide counters and tag filters, to ensure real-time data accuracy.\n• AI-Assisted Workflow: Utilized AI tools for initial scaffolding while focusing on manual verification and debugging of the generated logic.",
-      tech: ["React 19", "ESLint", "Vite", "QA Automation"],
-      link: "https://startgermany.vercel.app/",
-      image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=800",
-    },
-    {
-      title: "Lyia Braids",
-      subtitle: "Service Website",
-      tag: "UX & Testing",
-      description: "• UX Optimization: Designed a mobile-first interface and implemented a direct-to-WhatsApp booking integration to minimize user friction.\n• Cross-Browser Testing: Verified layout consistency across Chrome, Safari, and mobile views to ensure a professional user experience.\n• Privacy Compliance: Integrated and tested GDPR-compliant cookie consent banners.",
-      tech: ["Tailwind CSS", "UX Design", "GDPR Compliance"],
-      link: "https://lyia-braids.vercel.app/",
-      image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&q=80&w=800",
-    }
-  ];
-
-  const experience = [
-    {
-      company: "Malengo gGmbH",
-      role: "Working Student (Data Quality & Program Support)",
-      period: "12/2025 - Present",
-      tasks: [
-        "Data Validation: Manage and validate comprehensive tracking sheets and dashboards for the Kenya TVET scholar program, covering cohorts 2024B, 2025A, and 2025B.",
-        "Consistency Checks: Conduct daily verification between attendance logs, vaccination records, and status reports to identify and resolve discrepancies.",
-        "Process Documentation: Structure and maintain operational data files to ensure 100% data integrity for reporting."
-      ],
-      icon: <Database className="w-5 h-5 text-blue-400" />
-    },
-    {
-      company: "Study in Germany (DAAD)",
-      role: "Volunteer Blogger",
-      period: "03/2025 - Present",
-      tasks: [
-        "Content QA: Write, verify accuracy and clarity of information for the international audience."
-      ],
-      icon: <Globe className="w-5 h-5 text-emerald-400" />
-    }
-  ];
+  const t = content[language];
 
   return (
     <ReactLenis root>
-      <div
-        className="min-h-screen bg-[#050B14] text-slate-200 font-sans selection:bg-blue-500/30 selection:text-blue-200 relative overflow-hidden"
-        onMouseMove={handleMouseMove}
-      >
-        <SystemStatus />
+      <div className="min-h-screen page" onMouseMove={handleMouseMove}>
+        <SystemStatus
+          statusText={t.systemStatus.status}
+          locationText={t.systemStatus.location}
+          timeLocale={t.systemStatus.timeLocale}
+        />
 
-        {/* Background Layer */}
         <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-
-
-          {/* Cinematic Noise - Reduced Opacity for Clarity */}
-          <div
-            className="absolute inset-0 z-[5] opacity-[0.02] mix-blend-overlay pointer-events-none"
-            style={{ backgroundImage: noiseBg }}
-          />
-
-          {/* Knowledge Particles (Floating Terms) */}
-          <BackgroundParticles />
-
-          {/* Mouse Spotlight */}
+          <div className="absolute inset-0 grid-surface" />
+          <div className="absolute inset-0 opacity-50" style={{ backgroundImage: noiseBg }} />
           <motion.div
-            className="absolute inset-0 z-[2] opacity-40"
+            className="absolute inset-0 opacity-40"
             style={{
               background: useMotionTemplate`
-              radial-gradient(
-                600px circle at ${mouseX}px ${mouseY}px,
-                rgba(255, 255, 255, 0.03),
-                transparent 80%
-              )
-            `,
+                radial-gradient(
+                  520px circle at ${mouseX}px ${mouseY}px,
+                  var(--spotlight),
+                  transparent 75%
+                )
+              `
             }}
           />
-
-          {/* Ambient Glows - Reduced Intensity (More Deep Space) */}
-          <motion.div
-            animate={{ scale: [1, 1.1, 1], rotate: [0, 3, -3, 0] }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            className="absolute top-[-10%] left-[-10%] w-[60vw] h-[60vw] bg-blue-900/15 rounded-full blur-[120px] mix-blend-screen"
-          />
-          <motion.div
-            animate={{ scale: [1, 1.2, 1], x: [0, 40, -40, 0] }}
-            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-            className="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-indigo-900/15 rounded-full blur-[100px] mix-blend-screen"
-          />
+          <div className="absolute -top-[20%] right-[10%] h-[38vw] w-[38vw] rounded-full blur-[120px] bg-[var(--glow-1)] opacity-70" />
+          <div className="absolute -bottom-[30%] left-[10%] h-[34vw] w-[34vw] rounded-full blur-[120px] bg-[var(--glow-2)] opacity-70" />
         </div>
 
-        {/* Content Wrapper */}
         <div className="relative z-10">
-
-          {/* Navigation */}
-          <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-[#050B14]/90 backdrop-blur-xl border-b border-white/5 py-4' : 'bg-transparent py-6'}`}>
+          <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'nav-scrolled' : 'nav-clear'}`}>
             <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
               <Magnetic>
-                <a href="#" className="text-xl font-bold text-white tracking-tight flex items-center gap-2 group">
-                  {/* Reverted Logo to Pure Text as requested */}
-                  <span className="group-hover:text-blue-400 transition-colors">Mark Daniels<span className="text-blue-500">.</span></span>
+                <a href="#" className="flex items-center gap-3 text-lg font-semibold tracking-tight" aria-label="Mark Daniels Mbaziira">
+                  <img src="/logo.png" alt="Mark Daniels Mbaziira" className="logo-mark" />
+                  <span className="sr-only">Mark Daniels Mbaziira</span>
                 </a>
               </Magnetic>
 
-              <motion.div
-                initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }}
-                className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-200"
-              >
-                {['About', 'Experience', 'Projects'].map((item) => (
-                  <Magnetic key={item}>
-                    <a href={`#${item.toLowerCase()}`} className="hover:text-blue-400 transition-colors relative group block px-2 py-1">
-                      {item}
-                      <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-500 transition-all group-hover:w-full" />
-                    </a>
-                  </Magnetic>
-                ))}
-                <Magnetic>
-                  <a href={`mailto:markdanielsmbaziira@gmail.com`} className="block bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-xl transition-all shadow-lg shadow-blue-600/20 hover:shadow-blue-600/40 active:scale-95">
-                    Contact Me
+              <div className="hidden md:flex items-center gap-8 text-sm font-semibold">
+                {t.nav.map((item) => (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    className="hover:text-accent transition-colors"
+                  >
+                    {item.label}
                   </a>
-                </Magnetic>
-              </motion.div>
+                ))}
+                <LanguageToggle
+                  language={language}
+                  label={t.language.label}
+                  onToggle={() => setLanguage(language === 'en' ? 'de' : 'en')}
+                />
+                <ThemeToggle
+                  theme={theme}
+                  labels={t.theme}
+                  onToggle={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+                />
+                <a href={`mailto:${socialLinks.email}`} className="button-primary">
+                  {t.footer.ctaPrimary}
+                </a>
+              </div>
 
-              <button className="md:hidden p-2 bg-white/5 rounded-lg text-slate-300" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-                {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
-              </button>
+              <div className="md:hidden flex items-center gap-2">
+                <ThemeToggle
+                  theme={theme}
+                  labels={t.theme}
+                  onToggle={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+                />
+                <button className="icon-button" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                  {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+                </button>
+              </div>
             </div>
+
+              {isMenuOpen && (
+                <div className="md:hidden surface border rounded-2xl mt-3 mx-6 p-4 flex flex-col gap-4 text-sm">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <LanguageToggle
+                      language={language}
+                      label={t.language.label}
+                      onToggle={() => setLanguage(language === 'en' ? 'de' : 'en')}
+                    />
+                    <ThemeToggle
+                      theme={theme}
+                      labels={t.theme}
+                      onToggle={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+                    />
+                  </div>
+                  {t.nav.map((item) => (
+                    <a
+                      key={item.href}
+                      href={item.href}
+                      className="hover:text-accent transition-colors"
+                    >
+                      {item.label}
+                    </a>
+                  ))}
+                  <a href={`mailto:${socialLinks.email}`} className="button-primary w-full text-center">
+                    {t.footer.ctaPrimary}
+                  </a>
+                </div>
+              )}
           </nav>
 
-          {/* Hero Section */}
-          <section className="relative min-h-[90vh] flex flex-col justify-center px-6 pt-20">
-            <div className="max-w-6xl mx-auto w-full grid md:grid-cols-2 gap-12 items-center">
-
-              <motion.div
-                initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, ease: "easeOut" }}
-              >
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[11px] font-bold uppercase tracking-widest mb-6 backdrop-blur-md">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-                  </span>
-                  Seeking Working Student Roles
+          <section className="relative min-h-[90vh] flex flex-col justify-center px-6 pt-24">
+            <div className="max-w-6xl mx-auto w-full grid lg:grid-cols-[1.2fr_0.8fr] gap-12 items-center">
+              <motion.div initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}>
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-[11px] font-bold uppercase tracking-[0.2em] surface">
+                  <span className="inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+                  {t.hero.badge}
                 </div>
 
-                <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-6 text-white leading-[1.1] drop-shadow-lg">
-                  Building Systems. <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500 filter drop-shadow-lg">
-                    <DecryptText text="Mastering Logic." />
-                  </span>
+                <h1 className="text-5xl md:text-7xl font-semibold tracking-tight leading-[1.05] mt-6">
+                  {t.hero.title} <span className="text-accent">{t.hero.titleAccent}</span>.
                 </h1>
 
-                <p className="max-w-xl text-lg text-slate-200 leading-relaxed mb-8">
-                  I am an <span className="text-slate-100 font-semibold underline decoration-blue-500/50 decoration-2 underline-offset-4">Information Systems Student</span> at TH Augsburg.
-                  Experienced in validating complex relational data and testing modern web applications.
+                <p className="mt-6 text-lg text-muted max-w-xl">
+                  {t.hero.subtitle}
                 </p>
 
-                <div className="flex flex-wrap gap-4">
+                <div className="mt-8 flex flex-wrap gap-4">
                   <Magnetic>
-                    <a href="#projects" className="group flex items-center gap-2 bg-white text-black hover:bg-blue-50 px-6 py-3.5 rounded-xl font-bold transition-all shadow-xl shadow-white/5 hover:shadow-white/10 active:scale-95">
-                      See My Progress <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    <a href="#case-studies" className="button-primary">
+                      {t.hero.ctaPrimary} <ChevronRight size={16} />
                     </a>
                   </Magnetic>
-                  <div className="flex items-center gap-3">
-                    <Magnetic>
-                      <a href="https://github.com/MarkDanielsMCraft" target="_blank" className="block p-3.5 bg-white/5 hover:bg-white/10 border border-white/5 rounded-xl transition-all hover:border-white/20 text-slate-300 hover:text-white"><Github className="w-5 h-5" /></a>
-                    </Magnetic>
-                    <Magnetic>
-                      <a href="https://www.linkedin.com/in/markdanielsm" target="_blank" className="block p-3.5 bg-white/5 hover:bg-white/10 border border-white/5 rounded-xl transition-all hover:border-white/20 text-slate-300 hover:text-white"><Linkedin className="w-5 h-5" /></a>
-                    </Magnetic>
+                    <a href={socialLinks.cvUrl} target="_blank" rel="noreferrer noopener" className="button-ghost">
+                    {t.hero.ctaSecondary} <ExternalLink size={14} />
+                  </a>
+                </div>
+
+                <div className="mt-6 surface-soft rounded-2xl p-4">
+                  <p className="text-sm text-muted">{t.hero.impact}</p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {t.hero.proof.map((item) => (
+                      <span key={item} className="badge badge-muted">{item}</span>
+                    ))}
                   </div>
+                </div>
+
+                <div className="mt-6 flex items-center gap-6 text-sm text-muted">
+                  <span className="flex items-center gap-2"><MapPin size={14} /> {t.hero.location}</span>
+                  <span className="flex items-center gap-2"><Globe size={14} /> {t.hero.languages}</span>
                 </div>
               </motion.div>
 
-              {/* Hero Visual - Code Snapshot */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.2 }}
-                className="relative hidden md:block perspective-1000"
-              >
-                <TiltCard className="relative bg-[#0a101f]/90 border border-white/10 backdrop-blur-xl rounded-2xl p-6 shadow-2xl">
-                  <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 rounded-2xl blur opacity-30" />
-
-                  <div className="flex items-center gap-2 mb-4 border-b border-white/5 pb-4 relative z-10">
-                    <div className="flex gap-1.5">
-                      <div className="w-3 h-3 rounded-full bg-red-500/50" />
-                      <div className="w-3 h-3 rounded-full bg-yellow-500/50" />
-                      <div className="w-3 h-3 rounded-full bg-green-500/50" />
+              <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.1 }}>
+                <TiltCard className="surface border rounded-3xl p-6 shadow-strong">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <img src="/logo.png" alt="Mark Daniels" className="logo-mark logo-mark--sm" />
+                      <div className="text-xs mono text-muted">{t.profile.label}</div>
                     </div>
-                    <div className="text-xs text-slate-400 font-mono ml-2">university_project.java</div>
+                    <span className="badge badge-accent">{t.profile.status}</span>
                   </div>
-                  <div className="space-y-3 font-mono text-sm relative z-10">
-                    <div className="text-slate-300">// Learning Algorithms in Java</div>
-                    <div className="pl-0 flex gap-4">
-                      <span className="text-purple-400">public class</span> <span className="text-yellow-200">Portfolio</span> {'{'}
+                  <div className="mt-6 space-y-4">
+                    <div>
+                      <p className="text-sm text-muted">{t.profile.focusLabel}</p>
+                      <h3 className="text-2xl font-semibold">{t.profile.focusValue}</h3>
                     </div>
-                    <div className="pl-6 flex gap-4">
-                      <span className="text-purple-400">public static void</span> <span className="text-blue-400">main</span>(String[] args) {'{'}
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      {t.profile.highlights.map((item) => (
+                        <div key={item.label} className="surface-soft rounded-2xl p-4">
+                          <p className="text-muted">{item.label}</p>
+                          <p className="font-semibold">{item.value}</p>
+                        </div>
+                      ))}
                     </div>
-                    <div className="pl-12 flex gap-4">
-                      <span className="text-purple-400">Student</span> <span className="text-white">me</span> = <span className="text-purple-400">new</span> <span className="text-yellow-200">Student</span>("Mark");
+                    <div className="border-t pt-4 text-sm text-muted">
+                      <DecryptText text={t.profile.tagline} />
                     </div>
-                    <div className="pl-12 flex gap-4">
-                      <span className="text-white">me</span>.<span className="text-blue-400">keepLearning</span>();
-                    </div>
-                    <div className="pl-12 flex gap-4">
-                      <span className="text-purple-400">System</span>.out.println(<span className="text-green-300">"Build. Break. Fix. Repeat."</span>);
-                    </div>
-                    <div className="pl-6 text-slate-400">{'}'}</div>
-                    <div className="text-slate-400">{'}'}</div>
                   </div>
                 </TiltCard>
               </motion.div>
-
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1, duration: 1 }}
-              className="absolute bottom-10 left-1/2 -translate-x-1/2 text-slate-400 animate-bounce cursor-pointer"
-              onClick={() => document.getElementById('about').scrollIntoView({ behavior: 'smooth' })}
-            >
-              <div className="w-[1px] h-12 bg-gradient-to-b from-transparent via-slate-400 to-transparent mx-auto" />
-            </motion.div>
-          </section>
-
-          {/* Bento Grid - About/Student Life */}
-          <section id="about" className="py-20 px-6 relative">
-            <div className="max-w-6xl mx-auto">
-              <RevealOnScroll>
-                <h2 className="text-3xl font-bold mb-10 flex items-center gap-3">
-                  <User className="text-blue-500" /> Student Profile
-                </h2>
-              </RevealOnScroll>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-                {/* Main Bio */}
-                <RevealOnScroll>
-                  <TiltCard className="md:col-span-2 bg-[#0a101f]/80 border border-white/5 rounded-3xl p-8 h-full hover:border-blue-500/30 transition-all backdrop-blur-md group hover:bg-[#0a101f]">
-                    <p className="text-lg text-slate-100 leading-relaxed mb-6 group-hover:text-white transition-colors">
-                      I am an <strong>International Information Systems student</strong> based in Augsburg, Germany. My studies bridge the gap between business logic and technical implementation.
-                    </p>
-                    <p className="text-slate-200 leading-relaxed group-hover:text-slate-100 transition-colors">
-                      I look to apply my structured work style and technical understanding to manual software testing. At <span className="text-white font-semibold">Malengo</span>, I manage complex data and ensure integrity for reporting.
-                    </p>
-                    <div className="mt-8 flex gap-6 text-sm font-medium text-slate-300">
-                      <span className="flex items-center gap-2 px-3 py-1 bg-white/5 rounded-full"><MapPin size={14} className="text-blue-400" /> TH Augsburg</span>
-                      <span className="flex items-center gap-2 px-3 py-1 bg-white/5 rounded-full"><Globe size={14} className="text-emerald-400" /> Eng, De, Luganda</span>
-                    </div>
-                  </TiltCard>
-                </RevealOnScroll>
-
-                {/* Stats/Resume */}
-                <RevealOnScroll delay={0.2}>
-                  <TiltCard className="bg-gradient-to-br from-blue-900/10 to-indigo-900/10 border border-white/5 rounded-3xl p-8 flex flex-col justify-between h-full hover:shadow-2xl hover:shadow-blue-900/10 transition-all relative overflow-hidden group">
-                    <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <div className="relative z-10">
-                      <div className="w-12 h-12 bg-blue-600/20 rounded-xl flex items-center justify-center mb-4 text-blue-400"><FileText size={24} /></div>
-                      <h3 className="text-xl font-bold text-white mb-1">My CV</h3>
-                      <p className="text-sm text-slate-300">See my coursework & projects.</p>
-                    </div>
-                    <div className="flex gap-2 mt-6 relative z-10">
-                      <Magnetic>
-                        <a href="https://portfolio-markdanielsmcrafts-projects.vercel.app/MARK_DANIELS_MBAZIIRA_CV.pdf" target="_blank" className="block w-full bg-white text-black py-2.5 px-4 rounded-lg text-center font-bold text-sm hover:bg-blue-50 transition-colors flex items-center justify-center gap-2 group">
-                          View <ExternalLink size={14} className="group-hover:translate-x-0.5 transition-transform" />
-                        </a>
-                      </Magnetic>
-                      <Magnetic>
-                        <a href="https://portfolio-markdanielsmcrafts-projects.vercel.app/MARK_DANIELS_MBAZIIRA_CV.pdf" download className="block px-3 py-2.5 bg-white/10 rounded-lg hover:bg-white/20 transition-colors text-white">
-                          <Download size={18} />
-                        </a>
-                      </Magnetic>
-                    </div>
-                  </TiltCard>
-                </RevealOnScroll>
-
-                {/* Tech Stack */}
-                <RevealOnScroll delay={0.3}>
-                  <TiltCard className="md:col-span-3 bg-[#0a101f]/80 border border-white/5 rounded-3xl p-8 backdrop-blur-sm relative overflow-hidden hover:border-white/10 transition-colors">
-                    <h3 className="text-sm font-bold uppercase tracking-widest text-slate-300 mb-6 flex items-center gap-2"><Cpu size={16} /> What I'm Learning</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
-                      <div>
-                        <h4 className="text-white font-medium mb-3 text-sm">Coursework & Code</h4>
-                        <div className="flex flex-wrap gap-2">
-                          <SkillBadge text="Java (OOP)" category="tech" />
-                          <SkillBadge text="SQL / Databases" category="tech" />
-                          <SkillBadge text="Business Process Modeling" category="tech" />
-                          <SkillBadge text="React 19" category="tech" />
-                          <SkillBadge text="Git" category="tech" />
-                        </div>
-                      </div>
-                      <div>
-                        <h4 className="text-white font-medium mb-3 text-sm">QA & Testing</h4>
-                        <div className="flex flex-wrap gap-2">
-                          <SkillBadge text="Manual Testing" category="test" />
-                          <SkillBadge text="Bug Reporting" category="test" />
-                          <SkillBadge text="User Acceptance Testing" category="test" />
-                          <SkillBadge text="Data Verification" category="test" />
-                        </div>
-                      </div>
-                    </div>
-                  </TiltCard>
-                </RevealOnScroll>
-
-              </div>
             </div>
           </section>
 
-          {/* Experience */}
-          <section id="experience" className="py-20 px-6 bg-white/[0.01]">
-            <div className="max-w-4xl mx-auto">
+          <section id="about" className="py-16 px-6">
+            <div className="max-w-6xl mx-auto grid lg:grid-cols-[1.1fr_0.9fr] gap-10 items-start">
               <RevealOnScroll>
-                <h2 className="text-3xl font-bold mb-12 flex items-center gap-3"><Calendar className="text-blue-500" /> Student Work</h2>
-              </RevealOnScroll>
-
-              <div className="space-y-12">
-                {experience.map((exp, idx) => (
-                  <RevealOnScroll key={idx} delay={idx * 0.1}>
-                    <div className="relative pl-8 md:pl-0">
-                      {/* Timeline Line */}
-                      <div className="absolute left-0 top-2 bottom-0 w-px bg-white/10 md:left-[140px]" />
-
-                      <div className="md:flex gap-12 group">
-                        <div className="hidden md:block w-[140px] text-right flex-shrink-0 pt-1">
-                          <span className="text-sm font-bold text-slate-500 group-hover:text-blue-400 transition-colors">{exp.period}</span>
-                        </div>
-
-                        <div className="relative flex-1 bg-slate-900/20 border border-white/5 p-6 rounded-2xl hover:border-blue-500/30 transition-all hover:bg-slate-900/40 backdrop-blur-sm">
-                          {/* Dot */}
-                          <div className="absolute left-[-37px] top-6 w-3 h-3 rounded-full bg-slate-800 border-2 border-slate-600 group-hover:bg-blue-500 group-hover:border-blue-300 transition-colors md:left-[-55px]" />
-
-                          <div className="flex justify-between items-start mb-4">
-                            <div>
-                              <h3 className="text-xl font-bold text-white mb-1">{exp.company}</h3>
-                              <p className="text-blue-400 font-medium text-sm">{exp.role}</p>
-                            </div>
-                            <div className="p-2 bg-white/5 rounded-lg text-slate-400 group-hover:text-white transition-colors">{exp.icon}</div>
-                          </div>
-
-                          <ul className="space-y-3">
-                            {exp.tasks.map((task, i) => (
-                              <li key={i} className="text-slate-300 text-sm leading-relaxed flex gap-3 group-hover:text-slate-200 transition-colors">
-                                <ChevronRight size={14} className="mt-1 flex-shrink-0 text-slate-600 group-hover:text-blue-500 transition-colors" />
-                                {task}
-                              </li>
-                            ))}
-                          </ul>
-
-                          {/* Mobile Period */}
-                          <div className="md:hidden mt-4 pt-4 border-t border-white/5">
-                            <span className="text-xs font-bold text-slate-500">{exp.period}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </RevealOnScroll>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* Projects */}
-          <section id="projects" className="py-24 px-6 relative">
-            <div className="max-w-6xl mx-auto">
-              <RevealOnScroll>
-                <h2 className="text-3xl font-bold mb-12 flex items-center gap-3"><Code2 className="text-blue-500" /> Academic & Side Projects</h2>
-              </RevealOnScroll>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {projects.map((project, idx) => (
-                  <RevealOnScroll key={idx} delay={idx * 0.2}>
-                    <motion.div
-                      whileHover={{ y: -8 }}
-                      className="group bg-slate-900/40 border border-white/5 rounded-3xl overflow-hidden hover:shadow-2xl hover:shadow-blue-900/20 transition-all backdrop-blur-md"
-                    >
-                      <div className="relative h-56 overflow-hidden">
-                        <div className="absolute inset-0 bg-blue-900/20 group-hover:bg-transparent transition-colors z-10" />
-                        <img
-                          src={project.image}
-                          alt={project.title}
-                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 opacity-80 group-hover:opacity-100"
-                        />
-                        <div className="absolute bottom-4 left-4 z-20">
-                          <span className="bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1 rounded-full border border-white/10 uppercase tracking-widest shadow-lg">
-                            {project.tag}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="p-8">
-                        <div className="flex justify-between items-start mb-4">
-                          <div>
-                            <h3 className="text-2xl font-bold text-white group-hover:text-blue-400 transition-colors">{project.title}</h3>
-                            <p className="text-sm text-slate-500 font-medium group-hover:text-slate-400 transition-colors">{project.subtitle}</p>
-                          </div>
-                          <Magnetic>
-                            <a href={project.link} target="_blank" className="block p-3 bg-white/5 rounded-xl text-slate-400 hover:text-white hover:bg-blue-600 transition-all shadow-lg">
-                              <ExternalLink size={18} />
-                            </a>
-                          </Magnetic>
-                        </div>
-
-                        <p className="text-slate-300 leading-relaxed mb-6 text-sm whitespace-pre-line">{project.description}</p>
-
-                        <div className="flex flex-wrap gap-2">
-                          {project.tech.map((t, i) => (
-                            <span key={i} className="text-[10px] px-2.5 py-1 bg-white/5 rounded-lg text-slate-400 border border-white/5 group-hover:border-white/10 group-hover:text-slate-300 transition-colors">
-                              {t}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </motion.div>
-                  </RevealOnScroll>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* Footer */}
-          <footer className="py-24 px-6 border-t border-white/5 relative overflow-hidden">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[1px] bg-gradient-to-r from-transparent via-blue-500/30 to-transparent" />
-            <div className="absolute inset-0 bg-blue-900/5 blur-[100px] pointer-events-none" />
-
-            <div className="max-w-4xl mx-auto text-center relative z-10">
-              <RevealOnScroll>
-                <h2 className="text-4xl md:text-5xl font-black mb-8 tracking-tight">Let's build something <span className="text-blue-500">stable.</span></h2>
-                <p className="text-slate-400 mb-10 max-w-lg mx-auto text-lg leading-relaxed">
-                  Currently looking for <strong>Working Student</strong> positions in Data, QA, or Web Dev.
-                </p>
-
-                <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
-                  <Magnetic>
-                    <a
-                      href={`mailto:${socialLinks.email}`}
-                      className="flex items-center gap-3 bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-xl shadow-blue-600/20 active:scale-95 transition-all"
-                    >
-                      <Mail size={20} /> Get in touch
-                    </a>
-                  </Magnetic>
-
-                  <Magnetic>
-                    <a
-                      href="https://buymeacoffee.com/markdanielsmcraft"
-                      target="_blank"
-                      className="flex items-center gap-3 bg-white/5 hover:bg-[#FFDD00] hover:text-black text-slate-300 px-8 py-4 rounded-2xl font-bold text-lg border border-white/10 hover:border-[#FFDD00] transition-all group active:scale-95"
-                    >
-                      <Coffee size={20} className="group-hover:animate-bounce" />
-                      <span>Fuel my studies</span>
-                    </a>
-                  </Magnetic>
+                <div className="surface border rounded-3xl p-8">
+                  <div className="flex items-center gap-2 text-xs mono text-muted">
+                    <User size={14} /> {t.about.label}
+                  </div>
+                  <h2 className="mt-4 text-3xl font-semibold">{t.about.title}</h2>
+                  <p className="text-sm mono text-muted mt-2">Mark Daniels Mbaziira</p>
+                  <p className="mt-4 text-muted">{t.about.body}</p>
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    {t.about.skills.map((skill) => (
+                      <SkillBadge key={skill.text} text={skill.text} variant={skill.variant} />
+                    ))}
+                  </div>
                 </div>
+              </RevealOnScroll>
 
-                <div className="bg-slate-900/50 border border-white/5 rounded-2xl p-6 max-w-2xl mx-auto backdrop-blur-sm mb-16 hover:border-white/10 transition-colors">
-                  <p className="text-sm text-slate-500 italic">
-                    "Every coffee helps me buy more textbooks (and debug more code)."
-                  </p>
-                </div>
-
-                <div className="flex flex-col md:flex-row justify-between items-center text-sm text-slate-600 border-t border-white/5 pt-8">
-                  <p>© 2026 Mark Daniels Mbaziira. Built with React 19.</p>
-                  <div className="flex gap-6 mt-4 md:mt-0">
-                    <a href={socialLinks.linkedin} className="hover:text-blue-400 transition-colors">LinkedIn</a>
-                    <a href={socialLinks.github} className="hover:text-blue-400 transition-colors">GitHub</a>
+              <RevealOnScroll delay={0.1}>
+                <div className="surface border rounded-3xl p-8">
+                  <div className="flex items-center gap-2 text-xs mono text-muted">
+                    <FileText size={14} /> {t.cv.label}
+                  </div>
+                  <h3 className="mt-4 text-xl font-semibold">{t.cv.title}</h3>
+                  <p className="mt-3 text-muted">{t.cv.subtitle}</p>
+                  <div className="mt-6 flex gap-3">
+                    <a href={socialLinks.cvUrl} className="button-primary">
+                      {t.cv.view} <ExternalLink size={14} />
+                    </a>
                   </div>
                 </div>
               </RevealOnScroll>
             </div>
-          </footer>
+          </section>
 
+          <section id="services" className="py-16 px-6">
+            <div className="max-w-6xl mx-auto">
+              <RevealOnScroll>
+                <div className="flex items-center justify-between gap-6">
+                  <div>
+                    <p className="text-xs mono text-muted">{t.services.label}</p>
+                    <h2 className="text-3xl font-semibold mt-2">{t.services.title}</h2>
+                  </div>
+                  <div className="hidden md:flex items-center gap-2 text-muted text-sm">
+                    <Cpu size={16} /> {t.services.tagline}
+                  </div>
+                </div>
+              </RevealOnScroll>
+
+              <div className="grid md:grid-cols-3 gap-6 mt-8">
+                {t.services.items.map((service, idx) => (
+                  <RevealOnScroll key={service.title} delay={idx * 0.1}>
+                    <div className="surface border rounded-3xl p-6 h-full">
+                      <div className="icon-pill">{service.icon}</div>
+                      <h3 className="mt-4 text-xl font-semibold">{service.title}</h3>
+                      <p className="mt-3 text-muted text-sm">{service.description}</p>
+                    </div>
+                  </RevealOnScroll>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section id="profiles" className="py-16 px-6">
+            <div className="max-w-6xl mx-auto">
+              <RevealOnScroll>
+                <div className="flex items-center justify-between gap-6">
+                  <div>
+                    <p className="text-xs mono text-muted">{t.profiles.label}</p>
+                    <h2 className="text-3xl font-semibold mt-2">{t.profiles.title}</h2>
+                    <p className="text-muted mt-2 max-w-xl">{t.profiles.subtitle}</p>
+                  </div>
+                </div>
+              </RevealOnScroll>
+
+              <div className="grid md:grid-cols-3 gap-6 mt-8">
+                {t.profiles.items.map((profile, idx) => (
+                  <RevealOnScroll key={profile.title} delay={idx * 0.1}>
+                    <a href={profile.link} target="_blank" rel="noreferrer noopener" className="social-card">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <span className="social-avatar">{profile.icon}</span>
+                          <div>
+                            <h3 className="text-lg font-semibold">{profile.title}</h3>
+                            <p className="text-sm text-muted">{profile.subtitle}</p>
+                          </div>
+                        </div>
+                        <ArrowUpRight size={16} />
+                      </div>
+
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {profile.meta.map((item) => (
+                          <span key={item} className="badge badge-muted">{item}</span>
+                        ))}
+                      </div>
+
+                      <div className="mt-5 grid grid-cols-2 gap-3">
+                        {profile.stats.map((stat) => (
+                          <div key={stat.label} className="surface-soft rounded-2xl p-3">
+                            <p className="text-xs mono text-muted">{stat.label}</p>
+                            <p className="text-sm font-semibold mt-1">{stat.value}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </a>
+                  </RevealOnScroll>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section id="case-studies" className="py-16 px-6">
+            <div className="max-w-6xl mx-auto">
+              <RevealOnScroll>
+                <div className="flex items-center justify-between gap-6">
+                  <div>
+                    <p className="text-xs mono text-muted">{t.caseStudies.label}</p>
+                    <h2 className="text-3xl font-semibold mt-2">{t.caseStudies.title}</h2>
+                  </div>
+                  <div className="flex items-center gap-4 text-muted text-sm">
+                    <a href={socialLinks.github} target="_blank" rel="noreferrer noopener" className="hover:text-accent">GitHub</a>
+                    <a href={socialLinks.linkedin} target="_blank" rel="noreferrer noopener" className="hover:text-accent">LinkedIn</a>
+                  </div>
+                </div>
+              </RevealOnScroll>
+
+              <div className="grid lg:grid-cols-2 gap-8 mt-8">
+                {t.caseStudies.items.map((study, idx) => (
+                  <RevealOnScroll key={study.title} delay={idx * 0.1}>
+                    <div className="surface border rounded-3xl overflow-hidden h-full">
+                      <div className="relative h-52 sm:h-60 max-[360px]:h-44 overflow-hidden">
+                        <img
+                          src={study.image}
+                          alt={study.title}
+                          loading="lazy"
+                          decoding="async"
+                          width="1200"
+                          height="700"
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                        <div className="absolute bottom-4 left-4 text-white">
+                          <p className="text-xs uppercase tracking-[0.2em]">{study.focus}</p>
+                          <h3 className="text-2xl font-semibold">{study.title}</h3>
+                        </div>
+                      </div>
+                      <div className="p-6 space-y-4">
+                        <p className="text-muted text-sm">{study.summary}</p>
+                        <div>
+                          <p className="text-xs mono text-muted">{t.caseStudies.challenge}</p>
+                          <p className="text-sm mt-2">{study.challenge}</p>
+                        </div>
+                        <div>
+                          <p className="text-xs mono text-muted">{t.caseStudies.actions}</p>
+                          <ul className="mt-2 space-y-2 text-sm">
+                            {study.actions.map((item) => (
+                              <li key={item} className="flex gap-2">
+                                <ChevronRight size={14} className="text-accent mt-1" />
+                                {item}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div>
+                          <p className="text-xs mono text-muted">{t.caseStudies.outcomes}</p>
+                          <ul className="mt-2 space-y-2 text-sm">
+                            {study.outcomes.map((item) => (
+                              <li key={item} className="flex gap-2">
+                                <ChevronRight size={14} className="text-emerald-600 mt-1" />
+                                {item}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {study.tech.map((tech) => (
+                            <span key={tech} className="badge">{tech}</span>
+                          ))}
+                        </div>
+                        <div className="flex flex-wrap items-center gap-4">
+                          <button
+                            type="button"
+                            onClick={() => setActiveReport(study.report)}
+                            className="button-ghost"
+                          >
+                            {t.caseStudies.report}
+                          </button>
+                          <a href={study.link} target="_blank" rel="noreferrer noopener" className="inline-flex items-center gap-2 text-sm font-semibold hover:text-accent">
+                            {t.caseStudies.visit} <ArrowUpRight size={14} />
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </RevealOnScroll>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section id="process" className="py-16 px-6">
+            <div className="max-w-6xl mx-auto">
+              <RevealOnScroll>
+                <p className="text-xs mono text-muted">{t.process.label}</p>
+                <h2 className="text-3xl font-semibold mt-2">{t.process.title}</h2>
+              </RevealOnScroll>
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
+                {t.process.steps.map((step, idx) => (
+                  <RevealOnScroll key={step.title} delay={idx * 0.1}>
+                    <div className="surface border rounded-3xl p-6">
+                      <div className="text-xs mono text-muted">0{idx + 1}</div>
+                      <h3 className="mt-4 text-lg font-semibold">{step.title}</h3>
+                      <p className="mt-2 text-sm text-muted">{step.description}</p>
+                    </div>
+                  </RevealOnScroll>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section id="tooling" className="py-16 px-6">
+            <div className="max-w-6xl mx-auto surface border rounded-3xl p-8">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                <div>
+                  <p className="text-xs mono text-muted">{t.tooling.label}</p>
+                  <h2 className="text-2xl font-semibold mt-2">{t.tooling.title}</h2>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {t.tooling.items.map((tool) => (
+                    <span key={tool} className="badge badge-muted">{tool}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="experience" className="py-16 px-6">
+            <div className="max-w-6xl mx-auto">
+              <RevealOnScroll>
+                <div className="flex items-center gap-2 text-xs mono text-muted">
+                  <Calendar size={14} /> {t.experience.label}
+                </div>
+                <h2 className="text-3xl font-semibold mt-2">{t.experience.title}</h2>
+              </RevealOnScroll>
+
+              <div className="space-y-6 mt-8">
+                {t.experience.items.map((exp, idx) => (
+                  <RevealOnScroll key={exp.company} delay={idx * 0.1}>
+                    <div className="surface border rounded-3xl p-6 md:p-8">
+                      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                        <div>
+                          <div className="flex items-center gap-3">
+                            <div className="icon-pill">{exp.icon}</div>
+                            <div>
+                              <h3 className="text-xl font-semibold">{exp.company}</h3>
+                              <p className="text-sm text-muted">{exp.role}</p>
+                            </div>
+                          </div>
+                        </div>
+                        <span className="text-xs mono text-muted">{exp.period}</span>
+                      </div>
+                      <ul className="mt-4 space-y-2 text-sm text-muted">
+                        {exp.tasks.map((task) => (
+                          <li key={task} className="flex gap-2">
+                            <ChevronRight size={14} className="text-accent mt-1" />
+                            {task}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </RevealOnScroll>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section id="education" className="py-16 px-6">
+            <div className="max-w-6xl mx-auto">
+              <RevealOnScroll>
+                <div className="flex items-center gap-2 text-xs mono text-muted">
+                  <Calendar size={14} /> {t.education.label}
+                </div>
+                <h2 className="text-3xl font-semibold mt-2">{t.education.title}</h2>
+              </RevealOnScroll>
+
+              <div className="space-y-6 mt-8">
+                {t.education.items.map((edu) => (
+                  <RevealOnScroll key={edu.degree}>
+                    <div className="surface border rounded-3xl p-6 md:p-8">
+                      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                        <div>
+                          <h3 className="text-xl font-semibold">{edu.degree}</h3>
+                          <p className="text-sm text-muted">{edu.school}</p>
+                        </div>
+                        <span className="text-xs mono text-muted">{edu.period}</span>
+                      </div>
+                      <p className="mt-4 text-sm text-muted">{edu.focus}</p>
+                    </div>
+                  </RevealOnScroll>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <footer className="py-16 px-6">
+            <div className="max-w-6xl mx-auto surface border rounded-3xl p-10 text-center">
+              <p className="text-xs mono text-muted">{t.footer.label}</p>
+              <h2 className="text-3xl md:text-4xl font-semibold mt-4">{t.footer.title}</h2>
+              <p className="text-muted mt-3">{t.footer.subtitle}</p>
+              <div className="mt-6 flex flex-col sm:flex-row justify-center gap-4">
+                <a href={`mailto:${socialLinks.email}`} className="button-primary">
+                  <Mail size={16} /> {t.footer.ctaPrimary}
+                </a>
+                <a href="https://buymeacoffee.com/markdanielsmcraft" target="_blank" rel="noreferrer noopener" className="button-ghost">
+                  <Coffee size={16} /> {t.footer.ctaSecondary}
+                </a>
+              </div>
+              <div className="mt-10 flex flex-col md:flex-row items-center justify-between text-xs text-muted gap-4">
+                <p>© 2026 Mark Daniels Mbaziira. Built with React 19.</p>
+                <div className="flex gap-4">
+                  <a href={socialLinks.linkedin} target="_blank" rel="noreferrer noopener" className="hover:text-accent">LinkedIn</a>
+                  <a href={socialLinks.github} target="_blank" rel="noreferrer noopener" className="hover:text-accent">GitHub</a>
+                </div>
+              </div>
+            </div>
+          </footer>
         </div>
       </div>
+      <div className={`fixed bottom-6 left-6 z-50 hidden md:flex flex-col gap-3 ${isDockCompact ? 'dock-compact' : ''}`}>
+        <a href={`mailto:${socialLinks.email}`} className="dock-button">
+          <Mail size={16} />
+          <span className="dock-text">{t.footer.ctaPrimary}</span>
+        </a>
+        <a href={socialLinks.cvUrl} target="_blank" rel="noreferrer noopener" className="dock-button">
+          <FileText size={16} />
+          <span className="dock-text">{t.hero.ctaSecondary}</span>
+        </a>
+        <a href={socialLinks.linkedin} target="_blank" rel="noreferrer noopener" className="dock-button">
+          <ArrowUpRight size={16} />
+          <span className="dock-text">LinkedIn</span>
+        </a>
+        <a href="https://buymeacoffee.com/markdanielsmcraft" target="_blank" rel="noreferrer noopener" className="dock-button">
+          <Coffee size={16} />
+          <span className="dock-text">{t.footer.ctaSecondary}</span>
+        </a>
+      </div>
+      <QAReportModal
+        isOpen={Boolean(activeReport)}
+        report={activeReport}
+        labels={t.reportModal}
+        onClose={() => setActiveReport(null)}
+      />
     </ReactLenis>
   );
 };
